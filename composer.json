@@ -1,0 +1,12 @@
+{
+    "name": "fzed51/calindex",
+    "description": "Calendrier perpetuel et d'evenement",
+    "authors": [
+        {
+            "name": "fabien.sanchez",
+            "email": "fzed51@gmail.com"
+        }
+    ],
+    "require": {
+	}
+}
