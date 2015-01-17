@@ -7,11 +7,11 @@
  */
 
 require './autoloader.class.php';
-(new autoloader())->addParentFolder()->register();
+(new \autoloader())->addParentFolder()->register();
 
 $param = array_merge($_GET, $_COOKIE, $_POST);
 
-$app = new Calindex();
+$app = new \Calindex();
 
 if (isset($param['annee'], $param['mois'])){
 	$annee = (int)$param['annee'];
