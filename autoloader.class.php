@@ -36,7 +36,7 @@ class autoloader {
 
 	/**
 	 * @access protected 
-	 * @var string[] $search_folders chemin dedans les quel l'autoloader cherche les classes
+	 * @var string[] $search_folders chemin dans les quel l'autoloader cherche les classes
 	 */
 	protected $search_folders = array();
 
