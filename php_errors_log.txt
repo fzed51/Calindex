@@ -30,3 +30,9 @@ Stack trace:
 [16-Jan-2015 14:07:07 Europe/Paris] PHP   1. {main}() C:\Users\fabien.sanchez\Documents\www\Calindex\index.php:0
 [16-Jan-2015 14:07:07 Europe/Paris] PHP   2. Calindex->index() C:\Users\fabien.sanchez\Documents\www\Calindex\index.php:25
 [16-Jan-2015 14:07:07 Europe/Paris] PHP   3. Calindex->affiche($annee = 2015, $mois = 1) C:\Users\fabien.sanchez\Documents\www\Calindex\calindex.class.php:20
+[19-Jan-2015 11:05:57 Europe/Paris] PHP Fatal error:  Class 'Calindex' not found in C:\Users\fabien.sanchez\Documents\www\Calindex\index.php on line 14
+[19-Jan-2015 11:05:57 Europe/Paris] PHP Stack trace:
+[19-Jan-2015 11:05:57 Europe/Paris] PHP   1. {main}() C:\Users\fabien.sanchez\Documents\www\Calindex\index.php:0
+[19-Jan-2015 11:14:32 Europe/Paris] PHP Fatal error:  Class 'Calindex' not found in C:\Users\fabien.sanchez\Documents\www\Calindex\index.php on line 14
+[19-Jan-2015 11:14:32 Europe/Paris] PHP Stack trace:
+[19-Jan-2015 11:14:32 Europe/Paris] PHP   1. {main}() C:\Users\fabien.sanchez\Documents\www\Calindex\index.php:0
