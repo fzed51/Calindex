@@ -7,7 +7,7 @@
  */
 
 require './autoloader.class.php';
-(new \autoloader())->addParentFolder()->register();
+(new \autoloader())->addFolder('./lib')->register();
 
 $param = array_merge($_GET, $_COOKIE, $_POST);
 
