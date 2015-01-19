@@ -26,5 +26,5 @@ class PDOConnect {
 			$this = self::$instance;
 		}
 	}
-
+	
 }
