@@ -29,5 +29,9 @@ class MyDB extends PDOConnect{
 		}
 		return self::$instance;
 	}
+	
+	static function queryEq($field, $value) {
+		
+	}
 
 }

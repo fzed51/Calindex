@@ -34,10 +34,13 @@ class EvenementPermanent extends Evenements {
 		'libelle'
 	];
 	
-			
 	function __construct(array $data) {
 		$clearData = $this->clearField($data);
 		$this->data = $data;
 	}
 
+	static function getFromMonth($month) {
+		$dbo = MyDB::getInstance();
+		
+	}
 }
