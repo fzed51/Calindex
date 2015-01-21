@@ -23,8 +23,21 @@ class PDOConnect {
 						$connexion->getPwd(),
 						$connexion->getOptions());
 			} else {
-			$this = self::$instance;
+			self::$instance = $this;
 		}
 	}
+	
+	/**
+	 * @static
+	 * @return instance
+	 */
+	static function getInstance(){
+		if (is_null(self::$instance)){
+			self::$instance = new MyDB();
+		}
+		return self::$instance;
+	}
+	
+	
 	
 }

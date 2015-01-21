@@ -12,26 +12,11 @@
  * @author fabien.sanchez
  */
 class MyDB extends PDOConnect{
-
-	static private $instance;
 	
 	private function __construct() {
 		
 		$info = new PDOSqLiteConnexion("../_db_/calindex.db");
 		parent::__construct($info);
-		self::$instance = $this;
 		
 	}
-	
-	static function getInstance(){
-		if (is_null(self::$instance)){
-			$db = new MyDB();
-		}
-		return self::$instance;
-	}
-	
-	static function queryEq($field, $value) {
-		
-	}
-
 }
