@@ -39,8 +39,9 @@ class EvenementPermanent extends Evenements {
 		$this->data = $data;
 	}
 
-	static function getFromMonth($month) {
+	static function getMonth($month) {
 		$dbo = MyDB::getInstance();
+		$dbo->
 		
 	}
 }
