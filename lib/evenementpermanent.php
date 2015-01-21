@@ -13,9 +13,17 @@
  */
 class EvenementPermanent extends Evenements {
 	
+	/** 
+	 * @var string $table_name  nom de la table
+	 */
 	static private $table_name = 'events_permanents';
+	/** 
+	 * @var string $pk_name  clé primaire de la table
+	 */
 	static private $pk_name = 'id';
-	
+	/** 
+	 * @var string[] $champs Liste de champ 
+	 */
 	static private $champs = [
 		'id',
 		'mois',
@@ -25,7 +33,9 @@ class EvenementPermanent extends Evenements {
 		'modified',
 		'created'
 	];
-	
+	/** 
+	 * @var string[] $notNull Liste des champs non null  
+	 */
 	static private $notNull = [
 		'id',
 		'mois',
@@ -34,14 +44,29 @@ class EvenementPermanent extends Evenements {
 		'libelle'
 	];
 	
+	/**
+	 * @param array $data [(int)$annee, (int)$mois]
+	 */
 	function __construct(array $data) {
-		$clearData = $this->clearField($data);
-		$this->data = $data;
+		$this->data = $this->clearField($data);
 	}
 
-	static function getMonth($month) {
+	/**
+	 * @param int $mois
+	 * @return EvenementPermanent[]
+	 */
+	static function getMonth( /*int*/$mois ) {
+		/** 
+		 * @var EvenementPermanent[] $events 
+		 */
+		$events = [];
 		$dbo = MyDB::getInstance();
-		$dbo->
-		
+		$sql = "Select * from " . self::$table_name . " where mois = :month";
+		$req = $dbo->prepare($sql, PDO::FETCH_NAMED);
+		$rep = $req->execute([':month'=> $mois ]);
+		foreach ($rep as $row) {
+			array_push($events, new EvenementPermanent($row));			
+		}
+		return $events;
 	}
 }
