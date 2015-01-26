@@ -14,6 +14,10 @@ $RECYCLE.BIN/
 # ----------------
 nbproject/
 
+# phpStorm
+# --------
+.Idea/
+
 # PHP log
 # -------
 php_errors_log.txt
