@@ -92,6 +92,7 @@ class autoloader {
 	 * @access public
 	 * @param string $folder
 	 * @return autoloader
+	 * @throw Exception
 	 */
 	public function addFolder(/*string*/$folder, /*bool*/$FullPath=false) {
 		if(!$FullPath){$folder = LIB . DS . $folder;}
@@ -109,7 +110,6 @@ class autoloader {
 	/**
 	 * @access public
 	 * @param string $className Nom de la classe a charger
-	 * @return bool 
 	 */
 	public function loadClass(/* string */ $className) {
 		/* string */ $filePath = "";
@@ -125,7 +125,6 @@ class autoloader {
 				require $filePath;
 			} else {
 				$this->log("[ERROR] Impossible de charger la classe $className");
-				return true;
 			}
 		}
 	}
@@ -137,9 +136,10 @@ class autoloader {
 	 */
 	protected function SearchClassInFolders(/*string*/ $className) {
 		/* string */ $filePath = "";
+		/* string */ $extension = $this->extension;
 		foreach ($this->search_folders as /* string */ $folder) {
-			if (file_exists($folder . DS . strtolower($className) . '.class.php')) {
-				$filePath = $folder . DS . strtolower($className) . '.class.php';
+			if (file_exists($folder . DS . strtolower($className) . $extension )) {
+				$filePath = $folder . DS . strtolower($className) . $extension ;
 			}
 		}
 		return $filePath;
