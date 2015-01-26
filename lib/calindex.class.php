@@ -46,6 +46,11 @@ class Calindex {
 		
 		$vue->affiche($data);		
 	}
-	
+
+	function newEventPermanent($annee, $mois, $jour, $param=[]){
+		$vue = new Vue(__DIR__.'nouveau_evenement_permanent.php');
+
+
+	}
 	
 }
