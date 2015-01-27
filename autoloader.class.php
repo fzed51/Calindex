@@ -11,6 +11,14 @@ if(!defined('DS')){
 	define('DS', '\\');
 }
 
+class AutoloaderException extends Exception {}
+
+class NotFoundClassException extends AutoloaderException {
+	function __construct($className){
+		parent::__construct("Impossible de charger la classe $className");
+	}
+}
+
 /**
  * -----------------------
  *   autoload
@@ -20,7 +28,7 @@ if(!defined('DS')){
  * @author fabien.sanchez
  * @copyright (c) 2014, Fabien "fzed51" SANCHEZ
  */
-class autoloader {
+class Autoloader {
 
 	/**
 	 * @access protected 
@@ -50,25 +58,47 @@ class autoloader {
 	 * @access protected
 	 * @var string $extension extension des fichiers recherchés
 	 */
-	protected $extension = "";
+	protected $extension = array();
 
+	/**
+	 * @access protected
+	 * @var bool $throw Flag qui permet de déclancher une exception particulière en cas de
+	 *    classe non trouvée
+	 */
+	protected $throw = True;
+
+	protected $cached = False;
+
+	/**
+	 * @var string
+	 */
+	protected $cache_file_name = "";
 
 	/**
 	 * @access public
 	 * @param array $option liste d'option pour la création
 	 */
-	public function __construct(array $option = []) {
+	function __construct(array $option = []) {
 		$defaut = [
 			"register" => false,
-			"extension" => ".class.php"
+			"extension" => array(".class.php"),
+			"throw" => True,
+			"cached" => False
 		];
 		$options = array_merge($defaut, $option);
+		$this->cache_file_name = LIB.DS.'cache_autoloader';
 		if(isset($options['register']) && $options['register']) {
 			$this->register();
 		}
 		if(isset($options['extension'])){
-			$this->extension = $options['extension'];
+			if(is_array($options['extension'])){
+				$this->extension = $options['extension'];
+			} else {
+				$this->extension = array($options['extension']);
+			}
 		}
+		$this->throw = (bool)$options['throw'];
+		$this->cached = (bool)$options['cached'];
 	}
 
 	/**
@@ -91,19 +121,36 @@ class autoloader {
 	/**
 	 * @access public
 	 * @param string $folder
-	 * @return autoloader
+	 * @return Autoloader
 	 * @throw Exception
 	 */
-	public function addFolder(/*string*/$folder, /*bool*/$FullPath=false) {
+	function addFolder(/*string*/$folder, /*bool*/$FullPath=false) {
 		if(!$FullPath){$folder = LIB . DS . $folder;}
 		if(!is_dir($folder)){throw new Exception("Impossible d'ajouter le "
 				. "dossier '$folder' à la bibliothèque de librairie!");}
-		array_push($this->search_folders, $folder);
+
+		if(!in_array($folder, $this->search_folders)) {
+			array_push($this->search_folders, $folder);
+		}
+		return $this;
+	}
+
+	/**
+	 * @access public
+	 * @param $extension
+	 * @return Autoloader
+	 */
+	function addExtension (/*string*/$extension) {
+		if($extension[0] != '.'){
+			$extension = '.'.$extension;
+		}
+		if(!in_array($extension, $this->extension)) {
+			array_push($this->extension, $extension);
+		}
 		return $this;
 	}
 	
-	
-	public function addParentFolder(){
+	function addParentFolder(){
 		return $this->addFolder(__DIR__, true);
 	}
 
@@ -111,7 +158,7 @@ class autoloader {
 	 * @access public
 	 * @param string $className Nom de la classe a charger
 	 */
-	public function loadClass(/* string */ $className) {
+	function loadClass(/* string */ $className) {
 		/* string */ $filePath = "";
 		if (!class_exists($className)) {
 			$this->log("Chargement de la classe : $className", true);
@@ -125,6 +172,9 @@ class autoloader {
 				require $filePath;
 			} else {
 				$this->log("[ERROR] Impossible de charger la classe $className");
+				if($this->throw){
+					throw new NotFoundClassException($className);
+				}
 			}
 		}
 	}
@@ -136,10 +186,11 @@ class autoloader {
 	 */
 	protected function SearchClassInFolders(/*string*/ $className) {
 		/* string */ $filePath = "";
-		/* string */ $extension = $this->extension;
-		foreach ($this->search_folders as /* string */ $folder) {
-			if (file_exists($folder . DS . strtolower($className) . $extension )) {
-				$filePath = $folder . DS . strtolower($className) . $extension ;
+		foreach ($this->search_folders as /*string*/ $folder) {
+			foreach ($this->extension as /*string*/ $extension){
+				if (file_exists($folder . DS . strtolower($className) . $extension )) {
+					$filePath = $folder . DS . strtolower($className) . $extension ;
+				}
 			}
 		}
 		return $filePath;
@@ -148,9 +199,9 @@ class autoloader {
 	/**
 	 * @access public
 	 * @param bool $prepend enregistre l'autoloader en début de file
-     * @return autoloader
+     * @return Autoloader
 	 */
-	public function register(/* bool */ $prepend = false) {
+	function register(/* bool */ $prepend = false) {
 		$this->registred = true;
 		spl_autoload_register(array($this, 'loadClass'), true, $prepend);
         return $this;
@@ -158,26 +209,56 @@ class autoloader {
 
 	/**
 	 * @access public
+	 * @param $actived
+	 * @return Autoloader
+	 */
+	function activeCache(/*bool*/$actived){
+		$this->cached = (bool)$actived;
+		return $this;
+	}
+
+	/**
+	 * @access public
      * @return autoloader
 	 */
-	public function unregister() {
+	function unregister() {
 		$this->registred = false;
 		spl_autoload_unregister(array($this, 'loadClass'));
         return $this;
 	}
 
 	/**
+	 * @access protected
+	 */
+	protected function loadCache(){
+		if(file_exists($this->cache_file_name)){
+			$content = file_get_contents($this->cache_file_name);
+			$this->class_files = unserialize($content);
+		}
+	}
+
+	/**
+	 * @access protected
+	 */
+	protected function saveCache(){
+		file_put_contents($this->cache_file_name, serialize($this->class_files));
+	}
+
+	/**
 	 * @access public
 	 * @return string[]
 	 */
-	public function getLog() {
+	function getLog() {
 		return $this->log;
 	}
 
 	/**
 	 * @access public
 	 */
-	public function __destruct() {
+	function __destruct() {
+		if($this->cached){
+			$this->saveCache();
+		}
 		if ($this->registred) {
 			$this->unregister();
 		}
