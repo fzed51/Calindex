@@ -13,7 +13,7 @@
  */
 class MyDB extends PDOConnect{
 	
-	private function __construct() {
+	public function __construct() {
 		
 		$info = new PDOSqLiteConnexion("../_db_/calindex.db");
 		parent::__construct($info);

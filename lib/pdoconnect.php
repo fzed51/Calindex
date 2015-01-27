@@ -33,7 +33,8 @@ class PDOConnect {
 	 */
 	static function getInstance(){
 		if (is_null(self::$instance)){
-			self::$instance = new MyDB();
+			$class = static::class;
+			self::$instance = new $class();
 		}
 		return self::$instance;
 	}
