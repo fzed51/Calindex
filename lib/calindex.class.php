@@ -32,7 +32,7 @@ class Calindex {
 	}
 	
 	function affiche($annee, $mois){
-		$vue = new Vue(__DIR__.'/vue_3_mois.php');
+		$vue = new Vue(__DIR__.'/vue_3_mois.phtml');
 		
 		$oMoisAvant = new Calendrier($this->annee_mois($annee, $mois, -1));
 		$oMois      = new Calendrier($this->annee_mois($annee, $mois));
@@ -48,7 +48,7 @@ class Calindex {
 	}
 
 	function newEventPermanent($annee, $mois, $jour, $param=[]){
-		$vue = new Vue(__DIR__.'nouveau_evenement_permanent.php');
+		$vue = new Vue(__DIR__.'nouveau_evenement_permanent.phtml');
 
 
 	}
