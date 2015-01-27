@@ -87,9 +87,6 @@ class Autoloader {
 		];
 		$options = array_merge($defaut, $option);
 		$this->cache_file_name = LIB.DS.'cache_autoloader';
-		if(isset($options['register']) && $options['register']) {
-			$this->register();
-		}
 		if(isset($options['extension'])){
 			if(is_array($options['extension'])){
 				$this->extension = $options['extension'];
@@ -99,6 +96,9 @@ class Autoloader {
 		}
 		$this->throw = (bool)$options['throw'];
 		$this->cached = (bool)$options['cached'];
+		if(isset($options['register']) && $options['register']) {
+			$this->register();
+		}
 	}
 
 	/**
@@ -203,6 +203,7 @@ class Autoloader {
 	 */
 	function register(/* bool */ $prepend = false) {
 		$this->registred = true;
+		$this->loadCache();
 		spl_autoload_register(array($this, 'loadClass'), true, $prepend);
         return $this;
 	}
@@ -214,6 +215,7 @@ class Autoloader {
 	 */
 	function activeCache(/*bool*/$actived){
 		$this->cached = (bool)$actived;
+		$this->loadCache();
 		return $this;
 	}
 
@@ -231,9 +233,14 @@ class Autoloader {
 	 * @access protected
 	 */
 	protected function loadCache(){
-		if(file_exists($this->cache_file_name)){
-			$content = file_get_contents($this->cache_file_name);
-			$this->class_files = unserialize($content);
+		if($this->cached){
+			if(file_exists($this->cache_file_name)){
+				$content = file_get_contents($this->cache_file_name);
+				$temp = unserialize($content);
+				if( is_array($temp)){
+					$this->class_files = array_merge($temp, $this->class_files);
+				}
+			}
 		}
 	}
 
@@ -241,7 +248,9 @@ class Autoloader {
 	 * @access protected
 	 */
 	protected function saveCache(){
-		file_put_contents($this->cache_file_name, serialize($this->class_files));
+		if($this->cached){
+			file_put_contents($this->cache_file_name, serialize($this->class_files));
+		}
 	}
 
 	/**
@@ -256,9 +265,7 @@ class Autoloader {
 	 * @access public
 	 */
 	function __destruct() {
-		if($this->cached){
-			$this->saveCache();
-		}
+		$this->saveCache();
 		if ($this->registred) {
 			$this->unregister();
 		}
