@@ -11,11 +11,11 @@
  *
  * @author fabien.sanchez
  */
-class PDOConnect {
+class PDOConnect Extends PDO{
 		
 	static private $instance;
 			
-	function __construct(PDOConnexion $connexion) {
+	function __construct(PDOParametreConnexionInterface $connexion) {
 		if(is_null(self::$instance) ) {
 				parent::__construct(
 						$connexion->getDNS(), 

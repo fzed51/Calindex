@@ -13,10 +13,13 @@
  */
 class PDOSqLiteConnexion extends PDOConnexion{
 
+
 	function __construct($path) {
 		if(file_exists($path)){
 			$this->setDNS("sqlite:" . $path);
 		}
 	}
+
+
 	
 }

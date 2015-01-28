@@ -62,7 +62,7 @@ class EvenementPermanent extends Evenements {
 		$events = [];
 		$dbo = MyDB::getInstance();
 		$sql = "Select * from " . self::$table_name . " where mois = :month";
-		$req = $dbo->prepare($sql, PDO::FETCH_NAMED);
+		$req = $dbo->prepare($sql, [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_NAMED]);
 		$rep = $req->execute([':month'=> $mois ]);
 		foreach ($rep as $row) {
 			array_push($events, new EvenementPermanent($row));			
