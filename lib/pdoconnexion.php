@@ -13,9 +13,9 @@
  */
 abstract class PDOConnexion implements PDOParametreConnexionInterface {
 	
-	private $dns;
-	private $user;
-	private $pwd;
+	private $dns     = NULL;
+	private $user    = NULL;
+	private $pwd     = NULL;
 	private $options = array();
 			
 	final function getDNS(){
@@ -40,7 +40,7 @@ abstract class PDOConnexion implements PDOParametreConnexionInterface {
 	protected function SetPwd(/*string*/$pwd) {
 		$this->pwd = $pwd;
 	}
-	protected function SetOptions(ArrayAccess $options) {
+	protected function SetOptions(array $options) {
 		foreach ($options as $key => $value) {
 			$this->AddOption($key, $value);
 		}
