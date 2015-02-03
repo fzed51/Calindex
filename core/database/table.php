@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace DBO;
+namespace Core\Database;
 
 class ExceptionTable extends \Exception {}
 class ExceptionFildUnknow extends ExceptionTable {
