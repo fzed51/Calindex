@@ -17,6 +17,17 @@ class Form extends ElementHtml{
     
 	private $data;
 	private $error;
+
+	/**
+	 * @param array $data
+	 * @param array $error
+     */
+	function __construct(array $data = array(), array $error = array()){
+
+		$this->data = $data;
+		$this->error = $error;
+
+	}
 		
 	/**
 	 * Ouvre la balise form
