@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 
+namespace Core\Database;
+
 /**
  * Description of PDOMySqlConnexion
  *

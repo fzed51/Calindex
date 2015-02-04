@@ -6,12 +6,14 @@
  * and open the template in the editor.
  */
 
+namespace Core\Database;
+
 /**
  * Description of pdoconnexion
  *
  * @author fabien.sanchez
  */
-abstract class PDOConnexion implements PDOParametreConnexionInterface {
+abstract class PDOConnexion implements PDOConnexionInterface {
 	
 	private $dns     = NULL;
 	private $user    = NULL;

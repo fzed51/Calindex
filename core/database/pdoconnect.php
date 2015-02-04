@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 
+namespace Core\Database;
+
 /**
  * Description of pdoconnect
  *
@@ -15,7 +17,7 @@ class PDOConnect Extends PDO{
 		
 	static private $instance;
 			
-	function __construct(PDOParametreConnexionInterface $connexion) {
+	function __construct(PDOConnexionInterface $connexion) {
 		if(is_null(self::$instance) ) {
 				parent::__construct(
 						$connexion->getDNS(), 
@@ -26,19 +28,5 @@ class PDOConnect Extends PDO{
 			self::$instance = $this;
 		}
 	}
-	
-	/**
-	 * @static
-	 * @return instance
-	 */
-	static function getInstance(){
-		if (is_null(self::$instance)){
-			$class = static::class;
-			self::$instance = new $class();
-		}
-		return self::$instance;
-	}
-	
-	
-	
+
 }

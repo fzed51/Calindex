@@ -6,11 +6,13 @@
  * and open the template in the editor.
  */
 
+namespace Core\Database;
+
 /**
  *
  * @author fabien.sanchez
  */
-interface PDOParametreConnexionInterface {
+interface PDOConnexionInterface {
 	function getDNS();
 	function getUser();
 	function getPwd();
