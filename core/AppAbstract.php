@@ -46,7 +46,7 @@ abstract class AppAbstract {
     {
         $connexion = NULL;
         if(isset(self::$Connect)){
-            switch(strtolower(Config::get('provider'))){
+            switch(strtolower(Config::get('DB_PROVIDER'))){
                 case 'sqlite':
                     $connexion = new PDOConnect(
                         new PDOSqLiteConnexion(
