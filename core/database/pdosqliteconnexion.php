@@ -8,6 +8,7 @@
 
 namespace Core\Database;
 
+
 /**
  * Description of pdosqliteconnexion
  *
