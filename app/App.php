@@ -11,9 +11,22 @@ class App extends \Core\AppAbstract {
             $page='calendrier';
         }
         
-        switch ($page {
+        switch ($page){
             case 'calendrier':
-            break;
+                $calendar = new \Calindex();
+
+                if (isset($_GET['annee'], $_GET['mois'])){
+                        $annee = (int)$_GET['annee'];
+                        $mois  = (int)$_GET['mois'];
+                        if($mois < 1 || $mois > 12){
+                                $calendar->index();
+                        }else{
+                                $calendar->affiche($annee, $mois);
+                        }
+                }else{
+                        $calendar->index();
+                }
+                break;
         }
     }
 

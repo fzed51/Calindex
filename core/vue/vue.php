@@ -36,9 +36,7 @@ abstract class Vue implements VueInterface {
         }
     }
 
-    public function render($data) {
-        // TODO: Implement render() method.
-    }
+    abstract public function render($data);
 
     private function getPath($path) {
         // TODO: si path est absolu -> path; sinon -> ViewPath + path
