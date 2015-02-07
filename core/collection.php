@@ -59,6 +59,14 @@ class Collection implements \ArrayAccess, \IteratorAggregate
             return NULL;
         }
     }
+    
+    public function getDefaut($item,$defaut) {
+        if($this->has($item)){
+            return $this->get($item);
+        } else {
+            return $defaut;
+        }
+    }
 
     /**
      * @param array $indexes
