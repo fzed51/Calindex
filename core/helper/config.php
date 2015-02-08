@@ -6,7 +6,7 @@
  * Time: 11:29
  */
 
-namespace core;
+namespace Core\Helper;
 
 class ConfigException extends \Exception {};
 

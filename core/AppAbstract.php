@@ -8,7 +8,7 @@
 
 namespace Core;
 
-
+use Core\Helper\Config;
 use Core\Database\PDOConnect;
 use Core\Database\PDOSqLiteConnexion;
 
@@ -48,24 +48,22 @@ abstract class AppAbstract {
         if(isset(self::$Connect)){
             switch(strtolower(Config::get('DB_PROVIDER'))){
                 case 'sqlite':
-                    $connexion = new PDOConnect(
-                        new PDOSqLiteConnexion(
-                            Config::get('DB_FILE')
-                        )
+                    $connexion = new PDOSqLiteConnexion(
+                        Config::get('DB_FILE')
                     );
                     break;
                 case 'mysql':
-                    $connexion = new PDOConnect(
-                        new PDOSqLiteConnexion(
-                            Config::get('DB_NAME'),
-                            Config::get('DB_USER'),
-                            Config::get('DB_PASSWORD'),
-                            Config::get('DB_HOST')
-                        )
+                    $connexion = new PDOSqLiteConnexion(
+                        Config::get('DB_NAME'),
+                        Config::get('DB_USER'),
+                        Config::get('DB_PASSWORD'),
+                        Config::get('DB_HOST')
                     );
                     break;
             }
+            self::$Connect = new PDOConnect($connexion);
         }
+        return self::$Connect;
     }
 
     abstract function run();

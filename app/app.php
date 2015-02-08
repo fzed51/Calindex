@@ -1,20 +1,24 @@
 <?php
 namespace App;
 
-class App extends \Core\AppAbstract {
+use App\Controler\Calindex;
+use Core\AppAbstract;
+use Core\Helper\Collection;
+
+class App extends AppAbstract {
 
     function run()
     {
-        $get = new \Core\Helper\Collection($_GET);
+        $get = new Collection($_GET);
         $page = $get->getDefaut('p', 'calendrier');
                 
         switch ($page){
             case 'calendrier':
-                $calendar = new \Calindex();
+                $calendar = new Calindex();
 
-                if (isset($get['annee'],$get['mois'])){
-                        $annee = (int)$get['annee'];
-                        $mois  = (int)$get['mois'];
+                if (isset($get->annee,$get->mois)){
+                        $annee = (int)$get->annee;
+                        $mois  = (int)$get->mois;
                         if($mois < 1 || $mois > 12){
                                 $calendar->index();
                         }else{

@@ -42,6 +42,14 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     public function __set($item, $value){
         $this->set($item, $value);
     }
+    
+    public function __isset($item) {
+        $this->has($item);
+    }
+    
+    public function __unset($item) {
+        $this->del($item);
+    }
 
     /**
      * @param $item
