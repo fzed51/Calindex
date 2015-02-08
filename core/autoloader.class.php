@@ -1,6 +1,9 @@
 <?php
 namespace Core;
 
+use DateTime;
+use Exception;
+
 /*
  * Copyright 2014 Fabien "fzed51" Sanchez
  */
@@ -13,7 +16,7 @@ if(!defined('DS')){
 	define('DS', '\\');
 }
 
-class AutoloaderException extends \Exception {}
+class AutoloaderException extends Exception {}
 
 class NotFoundClassException extends AutoloaderException {
 	private $className;
