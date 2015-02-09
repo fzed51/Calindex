@@ -15,44 +15,64 @@ class FileViewNotFount extends ViewException {}
 abstract class Vue implements VueInterface {
 
     private $name;
-    private $layout;
-    private $ViewPath;
+    protected $layout;
+	protected $extension = '.phtml';
 
-    public function __construct($name, array $options) {
-        $default = array(
-            'Path' => '',
-            'Layout' => ''
-        );
-        $options = array_merge($default, $options);
 
-        extract($options, 'OPT_');
+	final public function __construct(/*string*/$name) {
+		$this->setName($name);
+	}
 
-        $this->name = $name;
-        if (isset($OPT_Path) && $OPT_Path != '') {
-            $this->setPath($OPT_Path);
-        }
-        if (isset($OPT_Layout) && $OPT_Layout != '') {
-            $this->setLayout($OPT_Layout);
-        }
+	final public function render($data){
+		$vue = $this->getVueFile();
+		if($vue === ''){
+			throw new FileViewNotFount($vue);
+		}
+		$content = $this->renderFile($vue, $data);
+		$data['content'] = $content;
+		$layout = $this->getLayoutFile();
+		if($vue === ''){
+			return $content;
+		}
+		return $this->renderFile($layout, $data);
+	}
+	
+	final private function renderFile($__fileview, $data){
+		extract($data);
+		ob_start();
+		require $__fileview;
+		return ob_get_clean();
+	}
+
+	final public function setName($name) {
+		$this->name = $name;
+	}
+	
+    final public function setLayout($layout) {
+        $this->layout = $layout;
     }
+	
+	final protected function getLayoutFile(){
+		$path = ROOT_VUE . DS . 'layout' . DS;
+		$file = $path . $this->layout . $this->extension;
+		if (file_exists($file)){
+			return $file;
+		}
+		return '';
+	}
+	
+	final protected function getVueFile(){
+		$path = ROOT_VUE . DS;
+		$file = $path . DS . 
+				str_replace('.', DS, $this->name) . 
+				$this->extension;
+		if (file_exists($file)){
+			return $file;
+		}
+		return '';
+	}
 
-    abstract public function render($data);
-
-    private function getPath($path) {
-        // TODO: si path est absolu -> path; sinon -> ViewPath + path
-        return $this->ViewPath . DS . $path;
-    }
-
-    public function setLayout($layout) {
-        $layout = $this->getPath($layout);
-        if (file_exists($layout)) {
-            $this->layout = $layout;
-        } else {
-            throw new FileViewNotFount($layout);
-        }
-    }
-
-    public function setPath($path) {
+	final public function setPath($path) {
         if (file_exists($path) && is_dir($path)) {
             $this->ViewPath = $path;
         } else {

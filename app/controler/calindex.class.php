@@ -2,9 +2,8 @@
 
 namespace App\Controler;
 
-use Calendrier;
+use App\Vue\Vue;
 use DateTime;
-use Vue;
 
 class Calindex {
 	
