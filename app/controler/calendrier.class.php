@@ -1,10 +1,8 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace App\Controler;
+
+use \DateTime;
 
 /**
  * Description of Calendrier
@@ -37,7 +35,7 @@ class Calendrier {
 	}
 
 	private function make_evenement_perpetuel() {
-		$events = EvenementPermanent::getMonth($this->mois);
+		//$events = EvenementPermanent::getMonth($this->mois);
 	}
 
 	private function make_evenement_normal() {
@@ -147,8 +145,9 @@ class Calendrier {
 
 	private function getJours() {
 		$jours = array();
-		$oJour = DateTime::createFromFormat('Y m d', "{$this->annee} {$this->mois} 01");
-		for (; (int) $oJour->format('m') != $this->mois; $oJour->modify('+1 day')) {
+		for ($oJour = DateTime::createFromFormat('Y m d', "{$this->annee} {$this->mois} 01");
+				(int) $oJour->format('m') != $this->mois; 
+				$oJour->modify('+1 day')) {
 			$jours[$oJour->format('Ymd')] = $this->getJour($oJour);
 		}
 	}
