@@ -25,3 +25,7 @@ php_errors_log.txt
 # Prepros
 # -------
 prepros.cfg
+
+# Projet
+# ------
+cache_autoloader

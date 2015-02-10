@@ -236,6 +236,7 @@ class Autoloader {
 					if(is_dir($item)){
 						$liste = array_merge($liste, $this->scanFolder($fullItem));
 					} else {
+					
 						$liste[strtolower($fullItem)] = $fullItem;
 					}
 				}
