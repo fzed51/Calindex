@@ -13,6 +13,7 @@ define ('WEBROOT', 'localhost');
 
 require ROOT.DS.'core'.DS.'autoloader.class.php';
 (new Autoloader())
+	->activeCache(true)
     ->addExtension('.php')
     ->addExtension('.class.php')
     ->addFolder(ROOT, true)

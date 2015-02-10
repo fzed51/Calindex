@@ -66,6 +66,13 @@ class Autoloader {
 	protected $search_folders = array();
 
 	/**
+	 *
+	 * @var string[string] 
+	 */
+	protected $scanned_file = array();
+
+
+	/**
 	 * @access protected
 	 * @var bool $registred indique si autoloader est enregistré
 	 */
@@ -149,6 +156,10 @@ class Autoloader {
 		}
 
 		if(!in_array($folder, $this->search_folders)) {
+			$this->scanned_file = array_merge(
+					$this->scanned_file, 
+					$this->scanFolder($folder)
+					);
 			array_push($this->search_folders, $folder);
 		}
 		return $this;
@@ -212,6 +223,27 @@ class Autoloader {
 			}
 		}
 		return $filePath;
+	}
+	
+	protected function scanFolder ($folder){
+		$liste = array();
+		$skipItem = array('.','..','.git');
+		if(is_dir($folder)){
+			$local = scandir($folder);
+			foreach ($local as $item) {
+				if(!in_array($item, $skipItem)){
+					$fullItem = $folder.DS.$item;
+					if(is_dir($item)){
+						$liste = array_merge($liste, $this->scanFolder($fullItem));
+					} else {
+						$liste[strtolower($fullItem)] = $fullItem;
+					}
+				}
+			}
+		}else{
+			throw new AutoloaderException("le dossier '$folder' n'existe pas!");
+		}
+		return $liste;
 	}
 
 	/**

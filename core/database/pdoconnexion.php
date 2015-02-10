@@ -13,7 +13,7 @@ namespace Core\Database;
  *
  * @author fabien.sanchez
  */
-abstract class PDOConnexion implements PDOConnexionInterface {
+abstract class PDOConnexion implements iPDOConnexion {
 	
 	private $dns     = NULL;
 	private $user    = NULL;

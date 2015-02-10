@@ -11,14 +11,12 @@ class App extends AppAbstract {
 	
     function run()
     {
-		
 		$this->SetConfig('default');
 		
         $get = new Collection($_GET);
         $page = $get->getDefaut('p', 'calendrier');
         
 		$eventPerm = $this->GetTable('EventPerm');
-	
 		
         switch ($page){
             case 'calendrier':

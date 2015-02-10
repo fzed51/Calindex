@@ -32,7 +32,7 @@ abstract class AppAbstract {
 
 	public function GetDB() {
 		$connexion = NULL;
-		if (isset($this->dbConnect)) {
+		if (is_null($this->dbConnect)) {
 			switch (strtolower(Config::get('DB_PROVIDER'))) {
 				case 'sqlite':
 					$connexion = new PDOSqLiteConnexion(
@@ -45,7 +45,7 @@ abstract class AppAbstract {
 					);
 					break;
 			}
-			$this->dbConnect = new PDOConnect($connexion);
+			$this->dbConnect = new \PDOConnect($connexion);
 		}
 		return $this->dbConnect;
 	}

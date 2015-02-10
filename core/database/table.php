@@ -11,12 +11,14 @@ class ExceptionFildUnknow extends ExceptionTable {
 
 class Table {
 	protected $table;
-	public function __construct() {
-		
+	protected $db;
+	public function __construct(PDOConnect $db) {
+		$this->db = $db;		
 		if(is_null($this->table)){
-		$parts = explode('\\', get_class($this));
-		$class_name = end($parts);
-		$this->table = strtolower(str_replace('Table', '', $class_name));	
+			$parts = explode('\\', get_class($this));
+			$class_name = end($parts);
+			$this->table = strtolower(str_replace('Table', '', $class_name));	
 		}
 	}
+		
 }
