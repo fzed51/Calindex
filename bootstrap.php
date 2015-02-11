@@ -12,8 +12,8 @@ define ('ROOT_VUE', ROOT . DS . 'app' . DS . 'vue');
 define ('WEBROOT', 'localhost');
 
 require ROOT.DS.'core'.DS.'autoloader.class.php';
-(new Autoloader())
-	->activeCache(true)
+$autoloader = new Autoloader();
+$autoloader->activeCache(true)
     ->addExtension('.php')
     ->addExtension('.class.php')
     ->addFolder(ROOT, true)
@@ -22,3 +22,5 @@ require ROOT.DS.'core'.DS.'autoloader.class.php';
 
 (new App('Mon site'))
     ->run();
+
+unset($autoloader);

@@ -31,7 +31,7 @@ abstract class Vue implements VueInterface {
 		$content = $this->renderFile($vue, $data);
 		$data['content'] = $content;
 		$layout = $this->getLayoutFile();
-		if($vue === ''){
+		if($layout === ''){
 			return $content;
 		}
 		return $this->renderFile($layout, $data);
@@ -63,7 +63,7 @@ abstract class Vue implements VueInterface {
 	
 	final protected function getVueFile(){
 		$path = ROOT_VUE . DS;
-		$file = $path . DS . 
+		$file = $path . 
 				str_replace('.', DS, $this->name) . 
 				$this->extension;
 		if (file_exists($file)){

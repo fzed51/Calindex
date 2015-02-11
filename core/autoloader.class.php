@@ -154,7 +154,6 @@ class Autoloader {
 			$this->log("[ERROR] Impossible de trouver le dossier $folder");
 			throw new NotFoundFolder($folder);
 		}
-
 		if(!in_array($folder, $this->search_folders)) {
 			$this->scanned_file = array_merge(
 					$this->scanned_file, 
@@ -199,6 +198,7 @@ class Autoloader {
 			}
 			if ($filePath != '') {
 				$this->log("Classe chargé à partir du fichier $filePath");
+				$this->class_files[$className] = $filePath;
 				require $filePath;
 			} else {
 				$this->log("[ERROR] Impossible de charger la classe $className");
@@ -217,32 +217,44 @@ class Autoloader {
 		/* string */ $filePath = "";
 		foreach ($this->search_folders as /*string*/ $folder) {
 			foreach ($this->extension as /*string*/ $extension){
-				if (file_exists($folder . DS . strtolower($className) . $extension )) {
-					$filePath = $folder . DS . strtolower($className) . $extension ;
+				$file = $folder . DS . strtolower($className) . $extension;
+				if (isset ($this->scanned_file[strtolower($file)])) {
+					$filePath = $this->scanned_file[strtolower($file)];
+				}elseif (file_exists($file)){					
+					$filePath = $file ;
 				}
 			}
 		}
 		return $filePath;
 	}
-	
-	protected function scanFolder ($folder){
+
+	/**
+	 * @param string $folder complet
+	 * @return array
+	 * @throws NotFoundFolder
+	 */
+	protected function scanFolder (/*string*/$folder){
 		$liste = array();
-		$skipItem = array('.','..','.git');
+		$skipItem = array('.','..','.git', '.idea', 'nbproject');
+		$matchExtension = function($file, $ext) {
+			$lExt = strlen($ext);
+			return (substr($file, -$lExt) === $ext);
+		};
 		if(is_dir($folder)){
 			$local = scandir($folder);
 			foreach ($local as $item) {
 				if(!in_array($item, $skipItem)){
 					$fullItem = $folder.DS.$item;
-					if(is_dir($item)){
-						$liste = array_merge($liste, $this->scanFolder($fullItem));
-					} else {
-					
+					if(is_dir($fullItem)){
+						$next_folder = $this->scanFolder($fullItem);
+						$liste = array_merge($liste, $next_folder);
+					} elseif($matchExtension($item, '.php')) {
 						$liste[strtolower($fullItem)] = $fullItem;
 					}
 				}
 			}
 		}else{
-			throw new AutoloaderException("le dossier '$folder' n'existe pas!");
+			throw new NotFoundFolder($folder);
 		}
 		return $liste;
 	}

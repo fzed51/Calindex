@@ -45,7 +45,7 @@ abstract class AppAbstract {
 					);
 					break;
 			}
-			$this->dbConnect = new \PDOConnect($connexion);
+			$this->dbConnect = new PDOConnect($connexion);
 		}
 		return $this->dbConnect;
 	}

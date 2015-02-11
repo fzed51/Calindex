@@ -13,11 +13,11 @@ namespace Core\Database;
  *
  * @author fabien.sanchez
  */
-class PDOConnect Extends PDO{
+class PDOConnect Extends \PDO{
 		
 	static private $instance;
 			
-	function __construct(PDOConnexionInterface $connexion) {
+	function __construct(iPDOConnexion $connexion) {
 		if(is_null(self::$instance) ) {
 				parent::__construct(
 						$connexion->getDNS(), 
