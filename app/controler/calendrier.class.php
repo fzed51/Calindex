@@ -31,7 +31,7 @@ class Calendrier {
 		$this->make_vacances();
 		$infos = $this->getInfos();
 		$jours = $this->getJours();
-		return compact($infos, $jours);
+		return compact('infos', 'jours');
 	}
 
 	private function make_evenement_perpetuel() {
@@ -140,16 +140,17 @@ class Calendrier {
 		$annee = $this->annee;
 		$mois = $this->mois;
 		$nom_mois = $strMois[$mois - 1];
-		return compact($annee, $mois, $nom_mois);
+		return compact('annee', 'mois', 'nom_mois');
 	}
 
 	private function getJours() {
 		$jours = array();
-		for ($oJour = DateTime::createFromFormat('Y m d', "{$this->annee} {$this->mois} 01");
-				(int) $oJour->format('m') != $this->mois; 
+		$oJour = DateTime::createFromFormat('Y m d', "{$this->annee} {$this->mois} 01");
+		for (; (int) $oJour->format('m') != $this->mois; 
 				$oJour->modify('+1 day')) {
 			$jours[$oJour->format('Ymd')] = $this->getJour($oJour);
 		}
+		return $jours;
 	}
 
 	private function getJour(DateTime $ojour) {
@@ -164,7 +165,9 @@ class Calendrier {
 		$vacancesZA = false;
 		$vacancesZB = false;
 		$vacancesZC = false;
-		return compact($jour, $numJour, $abr_jour, $WE, $ferier, $eventPermanent, $eventNormal, $vacancesZA, $vacancesZB, $vacancesZC);
+		return compact('jour', 'numJour', 'abr_jour', 'WE', 'ferier', 
+				'eventPermanent', 'eventNormal', 'vacancesZA', 'vacancesZB', 
+				'vacancesZC');
 	}
 
 }

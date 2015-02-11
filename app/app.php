@@ -7,7 +7,7 @@ use Core\Helper\Collection;
 
 class App extends AppAbstract {
 	
-	use \Core\Singleton;
+	use \Core\Pattern\Singleton;
 	
     function run()
     {
@@ -16,9 +16,7 @@ class App extends AppAbstract {
         $get = new Collection($_GET);
         $page = $get->getDefaut('p', 'calendrier');
         
-		$eventPerm = $this->GetTable('EventPerm');
-		
-        switch ($page){
+		switch ($page){
             case 'calendrier':
                 $calendar = new Calindex();
                 if (isset($get->annee,$get->mois)){
