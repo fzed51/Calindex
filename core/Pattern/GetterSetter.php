@@ -46,17 +46,17 @@ class PropertyNotWritableException extends PropertyException {
  */
 trait GetterSetter {
 	public function __get($name) {
-		$methode = 'get'.ucfirst($name);
+		$methode = 'get_'.ucfirst($name);
 		if(method_exists($this, $methode)){
-			call_user_method($methode, $this);
+			return call_user_func ([$this,$methode]);
 		} else {
 			throw new PropertyNotFoundException($name);
 		}
 	}
 	public function __set($name, $value) {
-		$methode = 'set'.ucfirst($name);
+		$methode = 'set_'.ucfirst($name);
 		if(method_exists($this, $methode)){
-			call_user_method($methode, $this, $value);
+			call_user_func ([$this,$methode], $value);
 		} else {
 			throw new PropertyNotFoundException($name);
 		}
