@@ -68,7 +68,7 @@ class Date {
     }
 
     public function __toString() {
-        return sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
+        return \sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
     }
 
     public function add_day($day, $clone = false) {
@@ -152,22 +152,19 @@ class Date {
 
     static public function nb_jours_mois($year, $month) {
         switch ($month) {
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                return 30;
-                break;
             case 2:
                 if (self::annee_bisextille($year)) {
                     return 29;
                 } else {
                     return 28;
                 }
-                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                return 30;
             default:
                 return 31;
-                break;
         }
     }
 
@@ -207,7 +204,7 @@ class Date {
     }
 
     static public function make($year, $month, $day) {
-        return new self(sprinf("%04d%02d%02d", $year, $month, $day));
+        return new self(\sprintf("%04d%02d%02d", $year, $month, $day));
     }
 
 }
