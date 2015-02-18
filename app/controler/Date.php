@@ -15,6 +15,26 @@ class DateNotValidException extends DateException {
 class Date {
 
     use GetterSetter;
+    
+    static private $dico = [
+        'fr' => [
+            'mois' => ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+            'mois_abr' => ['', 'jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 
+                'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
+            'jour' => ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+            'jour_abr' => ['di.', 'lu.', 'ma.', 'me.', 'je.', 've.', 'sa.']
+        ],
+        // TODO: ajoute la culture english
+        'en' => [
+            'mois' => [],
+            'mois_abr' => [],
+            'jour' => [],
+            'jour_abr' => []
+        ],
+    ];
+    
+    static public $culture = 'fr';
 
     private $year;
 
@@ -203,8 +223,28 @@ class Date {
         return $paques->add_day(50);
     }
 
+    static public function jour_semaine($y, $m, $d) {
+        $D = 0;
+        if($m > 3){
+            $D = ( (int)((23 * $m) / 9) + $d + 4 + $y + (int)($y/4) - (int)($y/100) + (int)($y/400) - 2 ) % 7;
+        } else {
+            $z = $y - 1;
+            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($z/4) - (int)($z/100) + (int)($z/400) ) % 7;
+        }
+        return $D;
+    }   
+
+
     static public function make($year, $month, $day) {
         return new self(\sprintf("%04d%02d%02d", $year, $month, $day));
     }
+    
+    public function format($format='yyyymmdd') {
+        // TODO: Implémente la fonction de formatage.
+        return self::$dico[self::$culture]['jour'][
+            self::jour_semaine($this->year, $this->month, $this->day)
+        ];
+    }
+    
 
 }
