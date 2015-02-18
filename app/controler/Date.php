@@ -192,7 +192,7 @@ class Date {
         $divmod = function($a, $b) {
             $c = (int) $a / $b;
             $d = $a % $b;
-            return [$a, $b];
+            return [$c, $d];
         };
         $n = $year % 19;
         list($c, $u) = $divmod($year, 100);
