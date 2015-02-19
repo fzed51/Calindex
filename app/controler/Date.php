@@ -226,10 +226,12 @@ class Date {
     static public function jour_semaine($y, $m, $d) {
         $D = 0;
         if($m > 3){
-            $D = ( (int)((23 * $m) / 9) + $d + 4 + $y + (int)($y/4) - (int)($y/100) + (int)($y/400) - 2 ) % 7;
+            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($y/4) - 
+                    (int)($y/100) + (int)($y/400) - 2 ) % 7;
         } else {
             $z = $y - 1;
-            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($z/4) - (int)($z/100) + (int)($z/400) ) % 7;
+            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($z/4) - 
+                    (int)($z/100) + (int)($z/400) ) % 7;
         }
         return $D;
     }   
@@ -240,11 +242,25 @@ class Date {
     }
     
     public function format($format='yyyymmdd') {
-        // TODO: Implémente la fonction de formatage.
         $culture = self::$culture;
-        return self::$dico[$culture]['jour'][
-            self::jour_semaine($this->year, $this->month, $this->day)
-        ];
+        $dico = self::$dico[$culture];
+        $pattern = '/(yyyy|yy|mmmm|mmm|mm|m|dddd|ddd|dd|d)*/';
+        $yyyy = (string)$this->year;
+        $yy = (string)($this->year % 100);
+        $mmmm = $dico['mois'][$this->month];
+        $mmm = $dico['mois_abr'][$this->month];
+        $mm = substr("0".(string)$this->month,-2);
+        $m = (string)$this->month;
+        $jour = self::jour_semaine($this->year, $this->month, $this->day);
+        $dddd = $dico['jour'][$jour];
+        $ddd= $dico['jour_abr'][$jour];
+        $dd = substr("0".(string)$this->day,-2);
+        $d = (string)$this->day;
+        if (preg_match($pattern, $format, $matches) === 1){
+            var_dump( $matches );
+        }
+        return "";
+        
     }
     
 
