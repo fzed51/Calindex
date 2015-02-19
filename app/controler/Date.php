@@ -241,7 +241,8 @@ class Date {
     
     public function format($format='yyyymmdd') {
         // TODO: Implémente la fonction de formatage.
-        return self::$dico[self::$culture]['jour'][
+        $culture = self::$culture;
+        return self::$dico[$culture]['jour'][
             self::jour_semaine($this->year, $this->month, $this->day)
         ];
     }
