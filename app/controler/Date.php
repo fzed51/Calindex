@@ -256,8 +256,24 @@ class Date {
         $matches = ['yyyy', 'yy', 'mmmm', 'mmm', 'mm', 'm'];
         $pt = 0;
         $out = '';
-        for($pt=0; $pt<strlen($format);){
-            
+        for($pt=0; $pt<strlen($format);$pt++){
+            $ismatche = false;
+            if(in_array(substr($format,$pt,1),['y','m','d'])){
+                foreach ($matches as $value) {
+                    if (substr($format,$pt,strlen($value)) == $value ){
+                        $ismatche = true;
+                    }
+                }
+            }
+            if($ismatche){
+                $out.= ${$value};
+                $pt += strlen($value)-1;
+            }elseif (substr($format,$pt,1) == '\\') {
+                $pt++;
+                $out .= substr($format,$pt,1);
+            }else{
+                $out .= substr($format,$pt,1);
+            }
         }
         return $out;
     }
