@@ -15,12 +15,12 @@ class DateNotValidException extends DateException {
 class Date {
 
     use GetterSetter;
-    
+
     static private $dico = [
         'fr' => [
             'mois' => ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
                 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-            'mois_abr' => ['', 'jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 
+            'mois_abr' => ['', 'jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin',
                 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
             'jour' => ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
             'jour_abr' => ['di.', 'lu.', 'ma.', 'me.', 'je.', 've.', 'sa.']
@@ -33,9 +33,7 @@ class Date {
             'jour_abr' => []
         ],
     ];
-    
     static public $culture = 'fr';
-
     private $year;
 
     private function set_year(/* int */$year) {
@@ -225,43 +223,43 @@ class Date {
 
     static public function jour_semaine($y, $m, $d) {
         $D = 0;
-        if($m > 3){
-            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($y/4) - 
-                    (int)($y/100) + (int)($y/400) - 2 ) % 7;
+        if ($m > 3) {
+            $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($y / 4) -
+                    (int) ($y / 100) + (int) ($y / 400) - 2 ) % 7;
         } else {
             $z = $y - 1;
-            $D = ( (int)((23 * $m)/9) + $d + 4 + $y + (int)($z/4) - 
-                    (int)($z/100) + (int)($z/400) ) % 7;
+            $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($z / 4) -
+                    (int) ($z / 100) + (int) ($z / 400) ) % 7;
         }
         return $D;
-    }   
-
+    }
 
     static public function make($year, $month, $day) {
         return new self(\sprintf("%04d%02d%02d", $year, $month, $day));
     }
-    
-    public function format($format='yyyymmdd') {
+
+    public function format($format = 'yyyymmdd') {
         $culture = self::$culture;
         $dico = self::$dico[$culture];
-        $pattern = '/(yyyy|yy|mmmm|mmm|mm|m|dddd|ddd|dd|d)*/';
-        $yyyy = (string)$this->year;
-        $yy = (string)($this->year % 100);
+        $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
+        $yyyy = (string) $this->year;
+        $yy = (string) ($this->year % 100);
         $mmmm = $dico['mois'][$this->month];
         $mmm = $dico['mois_abr'][$this->month];
-        $mm = substr("0".(string)$this->month,-2);
-        $m = (string)$this->month;
+        $mm = substr("0" . (string) $this->month, -2);
+        $m = (string) $this->month;
         $jour = self::jour_semaine($this->year, $this->month, $this->day);
         $dddd = $dico['jour'][$jour];
-        $ddd= $dico['jour_abr'][$jour];
-        $dd = substr("0".(string)$this->day,-2);
-        $d = (string)$this->day;
-        if (preg_match($pattern, $format, $matches) === 1){
-            var_dump( $matches );
+        $ddd = $dico['jour_abr'][$jour];
+        $dd = substr("0" . (string) $this->day, -2);
+        $d = (string) $this->day;
+        $matches = ['yyyy', 'yy', 'mmmm', 'mmm', 'mm', 'm'];
+        $pt = 0;
+        $out = '';
+        for($pt=0; $pt<strlen($format);){
+            
         }
-        return "";
-        
+        return $out;
     }
-    
 
 }
