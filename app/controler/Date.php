@@ -253,26 +253,34 @@ class Date {
         $ddd = $dico['jour_abr'][$jour];
         $dd = substr("0" . (string) $this->day, -2);
         $d = (string) $this->day;
-        $matches = ['yyyy', 'yy', 'mmmm', 'mmm', 'mm', 'm'];
+        $matches = ['yyyy','yy','mmmm','mmm','mm','m','dddd','ddd','dd','d'];
         $pt = 0;
         $out = '';
-        for($pt=0; $pt<strlen($format);$pt++){
+        while($pt < strlen($format)){
             $ismatche = false;
+            $matche = '';
             if(in_array(substr($format,$pt,1),['y','m','d'])){
-                foreach ($matches as $value) {
-                    if (substr($format,$pt,strlen($value)) == $value ){
+                $i=0;
+                $matche='';
+                while((!$ismatche) && $i<count($matches)){
+                    $matche = $matches[$i];
+                    if (substr($format,$pt,strlen($matche)) == $matche ){
                         $ismatche = true;
                     }
+                    $i++;
                 }
+                unset($i);
             }
             if($ismatche){
-                $out.= ${$value};
-                $pt += strlen($value)-1;
+                $out.= ${$matche};
+                $pt += strlen($matche);
             }elseif (substr($format,$pt,1) == '\\') {
                 $pt++;
                 $out .= substr($format,$pt,1);
+                $pt++;
             }else{
                 $out .= substr($format,$pt,1);
+                $pt++;                
             }
         }
         return $out;
