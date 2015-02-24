@@ -17,7 +17,7 @@ $autoloader->activeCache(true)
     ->addExtension('.php')
     ->addExtension('.class.php')
     ->addFolder(ROOT, true)
-	->addFolder(ROOT.DS.'lib', true)
+    ->addFolder(ROOT.DS.'lib', true)
     ->register();
 
 (new App('Mon site'))
