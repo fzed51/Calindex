@@ -27,7 +27,7 @@ class Date {
         ],
         // TODO: ajoute la culture english
         'en' => [
-            'mois' => [],
+            'mois' => ['january'],
             'mois_abr' => [],
             'jour' => [],
             'jour_abr' => []
@@ -253,7 +253,7 @@ class Date {
         $l = (32 + 2 * $t + 2 * $b - $e - $d) % 7;
         $h = (int) (($n + 11 * $e + 22 * $l) / 451);
         list($m, $j) = $divmod($e + $l - 7 * $h + 114, 31);
-        $j = $j + 1;
+        $j += 1;
         return Self::make($year, $m, $j);
     }
 
@@ -295,8 +295,18 @@ class Date {
         $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
         $yyyy = (string) $this->year;
         $yy = (string) ($this->year % 100);
-        $mmmm = $dico['mois'][$this->month - 1];
-        $mmm = $dico['mois_abr'][$this->month - 1];
+        echo '<pre>';
+        var_dump($this);
+        echo '<br><hr>';
+        var_dump($dico['mois']);
+        echo '<br><hr>';
+        print_r(debug_backtrace());
+        echo '<br><hr>';
+        var_dump(($this->month - 1));
+        echo '<br><hr><hr>';
+        echo '</pre>';
+        $mmmm = $dico['mois'][($this->month - 1)];
+        $mmm = $dico['mois_abr'][($this->month - 1)];
         $mm = substr("0" . (string) $this->month, -2);
         $m = (string) $this->month;
         $j = self::jour_semaine($this->year, $this->month, $this->day);
