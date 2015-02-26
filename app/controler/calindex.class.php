@@ -3,22 +3,22 @@
 namespace App\Controler;
 
 use App\Vue\Vue;
-use DateTime;
+use App\Controler\Date;
 
 class Calindex {
 	
 	function index(){
-		$now = new DateTime();
+		$now = new Date();
 		$annee = (int) $now->format('Y');
 		$mois = (int) $now->format('m');
 		$this->affiche($annee, $mois);
 	}
 	
 	private function premier_du_mois($annee, $mois, $modif = 0) {
-		$date = new DateTime($annee.$mois.'01');
+		$date = Date::make($annee, $mois, 1);
 		$modif = (int)$modif;
 		if($modif != 0){
-			$date->modify("$modif month");
+			$date->add_month($modif);
 		}
 		return $date;
 	}

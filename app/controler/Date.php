@@ -18,12 +18,12 @@ class Date {
 
     static private $dico = [
         'fr' => [
-            'mois' => ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+            'mois' => ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
                 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-            'mois_abr' => ['', 'jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin',
+            'mois_abr' => ['jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin',
                 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
-            'jour' => ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
-            'jour_abr' => ['di.', 'lu.', 'ma.', 'me.', 'je.', 've.', 'sa.']
+            'jour' => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
+            'jour_abr' => ['lu.', 'ma.', 'me.', 'je.', 've.', 'sa.', 'di.']
         ],
         // TODO: ajoute la culture english
         'en' => [
@@ -225,13 +225,13 @@ class Date {
         $D = 0;
         if ($m > 3) {
             $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($y / 4) -
-                    (int) ($y / 100) + (int) ($y / 400) - 2 ) % 7;
+                    (int) ($y / 100) + (int) ($y / 400) - 2 ) ;
         } else {
             $z = $y - 1;
             $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($z / 4) -
-                    (int) ($z / 100) + (int) ($z / 400) ) % 7;
+                    (int) ($z / 100) + (int) ($z / 400) ) ;
         }
-        return $D;
+        return (($D-1)%7)+1;
     }
 
     static public function make($year, $month, $day) {
@@ -244,22 +244,22 @@ class Date {
         $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
         $yyyy = (string) $this->year;
         $yy = (string) ($this->year % 100);
-        $mmmm = $dico['mois'][$this->month];
-        $mmm = $dico['mois_abr'][$this->month];
+        $mmmm = $dico['mois'][$this->month-1];
+        $mmm = $dico['mois_abr'][$this->month-1];
         $mm = substr("0" . (string) $this->month, -2);
         $m = (string) $this->month;
-        $jour = self::jour_semaine($this->year, $this->month, $this->day);
-        $dddd = $dico['jour'][$jour];
-        $ddd = $dico['jour_abr'][$jour];
+        $j = self::jour_semaine($this->year, $this->month, $this->day);
+        $dddd = $dico['jour'][$j-1];
+        $ddd = $dico['jour_abr'][$j-1];
         $dd = substr("0" . (string) $this->day, -2);
         $d = (string) $this->day;
-        $matches = ['yyyy','yy','mmmm','mmm','mm','m','dddd','ddd','dd','d'];
+        $matches = ['yyyy','yy','mmmm','mmm','mm','m','dddd','ddd','dd','d','j'];
         $pt = 0;
         $out = '';
         while($pt < strlen($format)){
             $ismatche = false;
             $matche = '';
-            if(in_array(substr($format,$pt,1),['y','m','d'])){
+            if(in_array(substr($format,$pt,1),['y','m','d','j'])){
                 $i=0;
                 $matche='';
                 while((!$ismatche) && $i<count($matches)){
