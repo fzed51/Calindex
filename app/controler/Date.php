@@ -5,11 +5,11 @@ namespace App\Controler;
 use Core\Pattern\GetterSetter;
 
 class DateException extends \Exception {
-
+    
 }
 
 class DateNotValidException extends DateException {
-
+    
 }
 
 class Date {
@@ -101,7 +101,7 @@ class Date {
         $day = $date->day;
         $month = $date->month;
         $year = $date->year;
-        if($nb_day > 0){
+        if ($nb_day > 0) {
             for ($p = 0; $p < $nb_day; $p++) {
                 $day++;
                 if ($day > self::nb_jours_mois($year, $month)) {
@@ -112,7 +112,7 @@ class Date {
                         $year++;
                     }
                 }
-            } 
+            }
             $date->year = $year;
             $date->month = $month;
             $date->day = $day;
@@ -121,9 +121,9 @@ class Date {
         }
         return $date;
     }
-    
+
     public function sub_day($day, $clone = false) {
-if ($clone) {
+        if ($clone) {
             $date = clone $this;
         } else {
             $date = $this;
@@ -134,7 +134,7 @@ if ($clone) {
         $day = $date->day;
         $month = $date->month;
         $year = $date->year;
-        if($nb_day > 0){
+        if ($nb_day > 0) {
             for ($p = 0; $p < $nb_day; $p++) {
                 $day++;
                 if ($day < 1) {
@@ -154,7 +154,7 @@ if ($clone) {
         }
         return $date;
     }
-    
+
     public function add_month($nb_month, $clone = false) {
         if ($clone) {
             $date = clone $this;
@@ -167,8 +167,8 @@ if ($clone) {
         $day = $date->day;
         $month = $date->month;
         $year = $date->year;
-        if($nb_month > 0){
-            while($nb_month-- > 0){
+        if ($nb_month > 0) {
+            while ($nb_month-- > 0) {
                 $month++;
                 if ($month > 12) {
                     $month = 1;
@@ -184,8 +184,8 @@ if ($clone) {
         }
         return $date;
     }
-    
-        public function sub_month($nb_month, $clone = false) {
+
+    public function sub_month($nb_month, $clone = false) {
         if ($clone) {
             $date = clone $this;
         } else {
@@ -197,8 +197,8 @@ if ($clone) {
         $day = $date->day;
         $month = $date->month;
         $year = $date->year;
-        if($nb_month > 0){
-            while($nb_month-- > 0){
+        if ($nb_month > 0) {
+            while ($nb_month-- > 0) {
                 $month--;
                 if ($month < 1) {
                     $month = 12;
@@ -276,13 +276,13 @@ if ($clone) {
         $D = 0;
         if ($m > 3) {
             $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($y / 4) -
-                    (int) ($y / 100) + (int) ($y / 400) - 2 ) ;
+                    (int) ($y / 100) + (int) ($y / 400) - 2 );
         } else {
             $z = $y - 1;
             $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($z / 4) -
-                    (int) ($z / 100) + (int) ($z / 400) ) ;
+                    (int) ($z / 100) + (int) ($z / 400) );
         }
-        return (($D-1)%7)+1;
+        return (($D - 1) % 7) + 1;
     }
 
     static public function make($year, $month, $day) {
@@ -295,42 +295,42 @@ if ($clone) {
         $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
         $yyyy = (string) $this->year;
         $yy = (string) ($this->year % 100);
-        $mmmm = $dico['mois'][$this->month-1];
-        $mmm = $dico['mois_abr'][$this->month-1];
+        $mmmm = $dico['mois'][$this->month - 1];
+        $mmm = $dico['mois_abr'][$this->month - 1];
         $mm = substr("0" . (string) $this->month, -2);
         $m = (string) $this->month;
         $j = self::jour_semaine($this->year, $this->month, $this->day);
-        $dddd = $dico['jour'][$j-1];
-        $ddd = $dico['jour_abr'][$j-1];
+        $dddd = $dico['jour'][$j - 1];
+        $ddd = $dico['jour_abr'][$j - 1];
         $dd = substr("0" . (string) $this->day, -2);
         $d = (string) $this->day;
-        $matches = ['yyyy','yy','mmmm','mmm','mm','m','dddd','ddd','dd','d','j'];
+        $matches = ['yyyy', 'yy', 'mmmm', 'mmm', 'mm', 'm', 'dddd', 'ddd', 'dd', 'd', 'j'];
         $pt = 0;
         $out = '';
-        while($pt < strlen($format)){
+        while ($pt < strlen($format)) {
             $ismatche = false;
             $matche = '';
-            if(in_array(substr($format,$pt,1),['y','m','d','j'])){
-                $i=0;
-                $matche='';
-                while((!$ismatche) && $i<count($matches)){
+            if (in_array(substr($format, $pt, 1), ['y', 'm', 'd', 'j'])) {
+                $i = 0;
+                $matche = '';
+                while ((!$ismatche) && $i < count($matches)) {
                     $matche = $matches[$i];
-                    if (substr($format,$pt,strlen($matche)) == $matche ){
+                    if (substr($format, $pt, strlen($matche)) == $matche) {
                         $ismatche = true;
                     }
                     $i++;
                 }
                 unset($i);
             }
-            if($ismatche){
+            if ($ismatche) {
                 $out.= ${$matche};
                 $pt += strlen($matche);
-            }elseif (substr($format,$pt,1) == '\\') {
+            } elseif (substr($format, $pt, 1) == '\\') {
                 $pt++;
-                $out .= substr($format,$pt,1);
+                $out .= substr($format, $pt, 1);
                 $pt++;
-            }else{
-                $out .= substr($format,$pt,1);
+            } else {
+                $out .= substr($format, $pt, 1);
                 $pt++;
             }
         }
