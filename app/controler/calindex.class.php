@@ -9,9 +9,7 @@ class Calindex {
 	
 	function index(){
 		$now = new Date();
-		$annee = (int) $now->format('Y');
-		$mois = (int) $now->format('m');
-		$this->affiche($annee, $mois);
+		$this->affiche($now->year, $now->month);
 	}
 	
 	private function premier_du_mois($annee, $mois, $modif = 0) {

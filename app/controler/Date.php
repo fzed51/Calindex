@@ -51,7 +51,7 @@ class Date {
     }
 
     private function get_month() {
-        return $this->year;
+        return $this->month;
     }
 
     private $day;
@@ -61,7 +61,7 @@ class Date {
     }
 
     private function get_day() {
-        return $this->year;
+        return $this->day;
     }
 
     public function __construct(/* string */$date = null) {
@@ -295,16 +295,6 @@ class Date {
         $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
         $yyyy = (string) $this->year;
         $yy = (string) ($this->year % 100);
-        echo '<pre>';
-        var_dump($this);
-        echo '<br><hr>';
-        var_dump($dico['mois']);
-        echo '<br><hr>';
-        print_r(debug_backtrace());
-        echo '<br><hr>';
-        var_dump(($this->month - 1));
-        echo '<br><hr><hr>';
-        echo '</pre>';
         $mmmm = $dico['mois'][($this->month - 1)];
         $mmm = $dico['mois_abr'][($this->month - 1)];
         $mm = substr("0" . (string) $this->month, -2);
