@@ -88,13 +88,14 @@ class Calendrier {
         $numJour = (int) $oJour->format('w');
         $abr_jour = $oJour->format('ddd');
         $WE = ($numJour == 6 or $numJour == 7);
+        $aujourdhui = ($jour->compare(new Date()));
         $ferier = false;
         $eventPermanent = [];
         $eventNormal = [];
         $vacancesZA = false;
         $vacancesZB = false;
         $vacancesZC = false;
-        return compact('jour', 'numJour', 'abr_jour', 'WE', 'ferier', 
+        return compact('jour', 'numJour', 'abr_jour', 'WE', 'aujourdhui', 'ferier', 
                 'eventPermanent', 'eventNormal', 'vacancesZA', 'vacancesZB', 
                 'vacancesZC');
     }
