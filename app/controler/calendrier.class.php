@@ -75,7 +75,9 @@ class Calendrier {
 
     private function getJours() {
         $jours = array();
-        for ($oJour = Date::make($this->annee, $this->mois, 1); $oJour->month == $this->mois; $oJour->add_day(1)) {
+        for (   $oJour = Date::make($this->annee, $this->mois, 1); 
+                $oJour->month == $this->mois; 
+                $oJour->add_day(1)) {
             $jours[$oJour->format()] = $this->getJour($oJour);
         }
         return $jours;
@@ -83,18 +85,18 @@ class Calendrier {
 
     private function getJour(Date $oJour) {
         $jour = $oJour->day;
-        // @todo :  modifier la ligne suivante après avoir modifier la 
-        //          classe Date pour récupérer le numéro du jour.
         $numJour = (int) $oJour->format('w');
         $abr_jour = $oJour->format('ddd');
-        $WE = ($numJour == 0 or $numJour == 6);
+        $WE = ($numJour == 6 or $numJour == 7);
         $ferier = false;
         $eventPermanent = [];
         $eventNormal = [];
         $vacancesZA = false;
         $vacancesZB = false;
         $vacancesZC = false;
-        return compact('jour', 'numJour', 'abr_jour', 'WE', 'ferier', 'eventPermanent', 'eventNormal', 'vacancesZA', 'vacancesZB', 'vacancesZC');
+        return compact('jour', 'numJour', 'abr_jour', 'WE', 'ferier', 
+                'eventPermanent', 'eventNormal', 'vacancesZA', 'vacancesZB', 
+                'vacancesZC');
     }
 
 }

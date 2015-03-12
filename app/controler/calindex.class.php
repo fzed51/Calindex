@@ -33,7 +33,9 @@ class Calindex {
 		$mois_suivant   = $oMoisApres->getData();
 		
 		$data = compact('mois_precedant', 'mois_en_cours', 'mois_suivant');
-		var_dump($data);
+		echo "<pre>";
+                var_dump($data);
+                echo "</pre>";
 		echo $vue->render($data);		
 	}
 
