@@ -60,6 +60,15 @@ class Calendrier {
             $this->jours_ferier = $feries;
         }
     }
+    
+    private function est_jours_ferier($oJour) {
+        foreach ($this->jours_ferier as $ferier) {
+            if ($oJour->compare($ferier)==0){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private function make_vacances() {
         
@@ -85,11 +94,11 @@ class Calendrier {
 
     private function getJour(Date $oJour) {
         $jour = $oJour->day;
-        $numJour = (int) $oJour->format('w');
+        $numJour = (int) $oJour->format('j');
         $abr_jour = $oJour->format('ddd');
         $WE = ($numJour == 6 or $numJour == 7);
-        $aujourdhui = ($oJour->compare(new Date()));
-        $ferier = false;
+        $aujourdhui = ($oJour->compare(new Date()))==0;
+        $ferier = $this->est_jours_ferier($oJour);
         $eventPermanent = [];
         $eventNormal = [];
         $vacancesZA = false;

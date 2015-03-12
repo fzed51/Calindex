@@ -274,13 +274,13 @@ class Date {
 
     static public function jour_semaine($y, $m, $d) {
         $D = 0;
-        if ($m > 3) {
-            $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($y / 4) -
-                    (int) ($y / 100) + (int) ($y / 400) - 2 );
+        if ($m >= 3) {
+            $D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($y / 4)) -
+                    ((int) ($y / 100)) + ((int) ($y / 400)) - 2 );
         } else {
             $z = $y - 1;
-            $D = ( (int) ((23 * $m) / 9) + $d + 4 + $y + (int) ($z / 4) -
-                    (int) ($z / 100) + (int) ($z / 400) );
+            $D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($z / 4)) -
+                    ((int) ($z / 100)) + ((int) ($z / 400)) );
         }
         return (($D - 1) % 7) + 1;
     }
