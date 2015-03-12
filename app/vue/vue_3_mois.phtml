@@ -7,8 +7,8 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="style/app-dist.css">
-        <link rel="stylesheet" type="text/css" href="style/index-dist.css">
+        <link rel="stylesheet" type="text/css" href="style/css/app.css">
+        <link rel="stylesheet" type="text/css" href="style/css/index.css">
         <title>Calendex - ce mois</title>
     </head>
     <body>
@@ -30,10 +30,10 @@ and open the template in the editor.
                 </div>
                 <div class="jours">
     <?php foreach ($jours as $idJour => $jour): ?>
-                        <table class="jour <?= ($jour['WE'])?' we':'';?>">
+                        <table class="jour <?= ($jour['WE'])?'we':'';?> <?= ($jour['aujourdhui'])?'aujourdhui':'';?>">
                             <tr>
                                 <td class="abrnomjour"><?= $jour['abr_jour']; ?></td>
-                                <td class="numjour"><?= $jour['numJour']; ?></td>
+                                <td class="numjour"><?= $jour['jour']; ?></td>
                                 <td class="event">
                                     <ul class="event-perp">
                                         <?php foreach ($jour['eventPermanent'] as $eventPermanent): ?>

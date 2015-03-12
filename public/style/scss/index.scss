@@ -42,6 +42,7 @@ $color_event_norm : #22e;
 .jour {
 	width: 100%;
 	border-top: 1px solid $color_gallery_approx;
+	//td {border-left: 1px solid #000;}
 	&.ferier {
 		background-color: $color_titan_white_approx;
 		&.we {
@@ -64,10 +65,11 @@ $color_event_norm : #22e;
 		background-color: $color_fair_pink_approx;
 	}
 	.abrnomjour {
-		width: 1.5em;
+		width: 2em;
 	}
 	.numjour {
-		width: 2em;
+		width: 1.5em;
+                text-align: right;
 		font-weight: bold;
 		color: $color_guardsman_red_approx;
 	}
