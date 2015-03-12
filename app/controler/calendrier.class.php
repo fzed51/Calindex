@@ -88,7 +88,7 @@ class Calendrier {
         $numJour = (int) $oJour->format('w');
         $abr_jour = $oJour->format('ddd');
         $WE = ($numJour == 6 or $numJour == 7);
-        $aujourdhui = ($jour->compare(new Date()));
+        $aujourdhui = ($oJour->compare(new Date()));
         $ferier = false;
         $eventPermanent = [];
         $eventNormal = [];
