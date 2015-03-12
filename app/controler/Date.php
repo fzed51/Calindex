@@ -336,5 +336,12 @@ class Date {
         }
         return $out;
     }
+    
+    public function compare(Date $jour) {
+        $j1 = (int) $this->format();
+        $j2 = (int) $jour->format();
+        $diff = $j1 - $j2;
+        return $diff / abs($diff);
+    }
 
 }
