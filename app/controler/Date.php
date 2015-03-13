@@ -37,7 +37,7 @@ class Date {
     private $year;
 
     private function set_year(/* int */$year) {
-        $this->year = $year;
+        $this->year = (int)$year;
     }
 
     private function get_year() {
@@ -47,7 +47,7 @@ class Date {
     private $month;
 
     private function set_month(/* int */$month) {
-        $this->month = $month;
+        $this->month = (int)$month;
     }
 
     private function get_month() {
@@ -57,7 +57,7 @@ class Date {
     private $day;
 
     private function set_day(/* int */$day) {
-        $this->day = $day;
+        $this->day = (int)$day;
     }
 
     private function get_day() {
@@ -295,9 +295,10 @@ class Date {
         $pattern = '/(yyyy|yy|m{1,4}|d{1,4})*/';
         $yyyy = (string) $this->year;
         $yy = (string) ($this->year % 100);
+        var_dump($this);
         $mmmm = $dico['mois'][($this->month - 1)];
         $mmm = $dico['mois_abr'][($this->month - 1)];
-        $mm = substr("0" . (string) $this->month, -2);
+        $mm = substr("0" . ((string) $this->month), -2);
         $m = (string) $this->month;
         $j = self::jour_semaine($this->year, $this->month, $this->day);
         $dddd = $dico['jour'][$j - 1];

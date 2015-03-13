@@ -93,11 +93,12 @@ class Calendrier {
     }
 
     private function getJour(Date $oJour) {
+        $now = new Date();
         $jour = $oJour->day;
         $numJour = (int) $oJour->format('j');
         $abr_jour = $oJour->format('ddd');
         $WE = ($numJour == 6 or $numJour == 7);
-        $aujourdhui = ($oJour->compare(new Date()))==0;
+        $aujourdhui = ($oJour->compare($now)) == 0;
         $ferier = $this->est_jours_ferier($oJour);
         $eventPermanent = [];
         $eventNormal = [];
