@@ -27,10 +27,12 @@ class Date {
         ],
         // TODO: ajoute la culture english
         'en' => [
-            'mois' => ['january'],
-            'mois_abr' => [],
-            'jour' => [],
-            'jour_abr' => []
+            'mois' => ['january', 'february', 'march', 'april', 'may', 'june',
+                'july', 'august', 'september', 'october', 'november', 'december'],
+            'mois_abr' => ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug',
+                'sep', 'oct', 'nov', 'dec'],
+            'jour' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            'jour_abr' => ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
         ],
     ];
     static public $culture = 'fr';
