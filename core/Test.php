@@ -15,6 +15,8 @@ namespace Core;
 class Test {
 
 protected $class_test = '';
+private $nbSuccess = 0;
+private $nbTest = 0;
 
 const ICO_OK = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:svg=\"http://www.w3.org/2000/svg\" 
 width=\"20\" height=\"20\"><metadata id=\"metadata4151\">image/svg+xml</metadata>
@@ -69,7 +71,9 @@ function run() {
 
 function testEgal($elementTest, $elementComparaison, $libelle) {
 $succes = ($elementTest == $elementComparaison);
+$this->nbTest++;
 if ($succes) {
+    $this->nbSuccess++;
     echo "<p>".self::ICO_OK.nl2br($libelle)."</p>";
 }else{
     echo "<p>".self::ICO_KO.nl2br($libelle)."</p>";
