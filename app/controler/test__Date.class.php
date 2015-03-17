@@ -26,5 +26,16 @@ class test__Date extends \Core\Test {
         
         return $s;
     }
+
+    function test__add_day(){
+
+        $oDate = new Date('20140220');
+        $oDate->add_day(90);
+
+        $s = true;
+        $s = $this->testEgal($oDate, '20140521', 'add_day 90 jours') && $s;
+
+        return $s; 
+    }
     
 }
