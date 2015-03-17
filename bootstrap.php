@@ -23,4 +23,4 @@ $autoloader->activeCache(true)
 (new App('Mon site'))
     ->run();
 
-unset($autoloader);
+// unset($autoloader);
