@@ -63,6 +63,7 @@ class Calendrier {
     
     private function est_jours_ferier($oJour) {
         foreach ($this->jours_ferier as $ferier) {
+            
             if ($oJour->compare($ferier)==0){
                 return true;
             }

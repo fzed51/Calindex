@@ -33,15 +33,11 @@ class Calindex {
 		$mois_suivant   = $oMoisApres->getData();
 		
 		$data = compact('mois_precedant', 'mois_en_cours', 'mois_suivant');
-		/*echo "<pre>";
-                var_dump($data);
-                echo "</pre>";*/
 		echo $vue->render($data);		
 	}
 
 	function newEventPermanent($annee, $mois, $jour, $param=[]){
 		$vue = new Vue('nouveau_evenement_permanent');
-
 
 	}
 	
