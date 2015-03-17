@@ -57,7 +57,7 @@ function run() {
     ?>
     <div class="test_methode <?= ($succes)?"ok":"ko"; ?>">
         <p>Test de la methode <span class="methode_name"><?= $methode_name; ?></span></p>
-        <p class="test_methode_comment"><?= $comment; ?></p>
+        <div class="test_methode_comment"><?= $comment; ?></div>
     </div>
     <?php
     }
@@ -70,9 +70,11 @@ function run() {
 function testEgal($elementTest, $elementComparaison, $libelle) {
 $succes = ($elementTest == $elementComparaison);
 if ($succes) {
-    echo 
+    echo "<p>".self::ICO_OK.nl2br($libelle)."</p>";
+}else{
+    echo "<p>".self::ICO_KO.nl2br($libelle)."</p>";
 }
-return array($succes, $comment);
+return $succes;
 }
 
 }

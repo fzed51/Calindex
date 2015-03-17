@@ -83,6 +83,9 @@ function runTest(array $folders) {
     }
     .tests .methode_name{}
     .tests .test_methode{}
+    .tests .test_methode p{
+        line-height: 20px;
+    }
     .ok{
         background-color: rgba(0,255,0,0.1); 
     }
