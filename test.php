@@ -104,6 +104,7 @@ function runTest(array $folders) {
 					float:right;
 				}
 				.tests .test_class{}
+				.tests .test_class_resume{}
 			</style>
 		</head>
 		<body>
