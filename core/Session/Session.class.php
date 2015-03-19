@@ -6,7 +6,7 @@ class SessionException extends \Exception {
 
 }
 
-class HeadSentBeforSessionException extends SessionException {
+class HeadSendBeforSessionException extends SessionException {
 
 	public function __construct($fileHeaderSend = '', $lineHeaderSend = -1, $code = null, $previous = null) {
 		$fichier = '';
@@ -40,7 +40,7 @@ class Session implements ArrayAccess, Countable {
 		if (!headers_sent($file, $line)) {
 			session_start();
 		} else {
-			throw new HeadSentBeforSessionException($file, $line);
+			throw new HeadSendBeforSessionException($file, $line);
 		}
 	}
 
@@ -49,7 +49,7 @@ class Session implements ArrayAccess, Countable {
 	}
 
 	public function __set($key, $value) {
-		$this->offsetSet($key, $value);
+		$this->set($key, $value);
 	}
 
 	public function offsetExists($key) {
@@ -61,7 +61,7 @@ class Session implements ArrayAccess, Countable {
 	}
 
 	public function offsetSet($key, $value) {
-		$_SESSION[$key] = $value;
+		$this->set($key, $value);
 	}
 
 	public function offsetUnset($key) {
@@ -82,6 +82,10 @@ class Session implements ArrayAccess, Countable {
 		} else {
 			return $default;
 		}
+	}
+
+	private function set($key, $value) {
+		$_SERVER[$key] = $value;
 	}
 
 }
