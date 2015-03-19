@@ -6,7 +6,7 @@ class SessionException extends \Exception {
 
 }
 
-class SessionHeadSentException extends SessionException {
+class HeadSentBeforSessionException extends SessionException {
 
 	public function __construct($fileHeaderSend = '', $lineHeaderSend = -1, $code = null, $previous = null) {
 		$fichier = '';
@@ -30,17 +30,57 @@ class SessionHeadSentException extends SessionException {
  *
  * @author fabien.sanchez
  */
-class Session extends \Core\Helper\Collection {
+class Session implements ArrayAccess, Countable {
 
 	Use \Core\Pattern\Singleton;
 
 	public function __construct() {
 		$file = '';
 		$line = 0;
-		if (headers_sent($file, $line)) {
+		if (!headers_sent($file, $line)) {
 			session_start();
 		} else {
-			throw new SessionHeadSentException($file, $line);
+			throw new HeadSentBeforSessionException($file, $line);
+		}
+	}
+
+	public function __get($key) {
+		return $this->get($key);
+	}
+
+	public function __set($key, $value) {
+		$this->offsetSet($key, $value);
+	}
+
+	public function offsetExists($key) {
+		return isset($_SESSION[$key]);
+	}
+
+	public function offsetGet($key) {
+		return $this->get($key);
+	}
+
+	public function offsetSet($key, $value) {
+		$_SESSION[$key] = $value;
+	}
+
+	public function offsetUnset($key) {
+		unset($_SESSION[$key]);
+	}
+
+	public function count() {
+		return count($_SESSION);
+	}
+
+	public function raz() {
+		$_SESSION = array();
+	}
+
+	public function get($key, $default = null) {
+		if (isset($_SESSION[$key])) {
+			return $_SESSION[$key];
+		} else {
+			return $default;
 		}
 	}
 
