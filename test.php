@@ -8,6 +8,8 @@
 use Core\Autoloader;
 use Core\Test;
 
+session_start();
+
 date_default_timezone_set('Europe/Paris');
 
 define('DS', DIRECTORY_SEPARATOR);
