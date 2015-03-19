@@ -14,39 +14,42 @@ namespace Core;
  */
 class Test {
 
-	protected $class_test   = '';
-	private   $nbSuccess_c  = 0;
-	private   $nbTest_c     = 0;
-	private   $nbSuccess_m  = 0;
-	private   $nbTest_m     = 0;
-	private   $lastCommentMethode = '';
+	protected $class_test = '';
+	private $nbSuccess_c = 0;
+	private $nbTest_c = 0;
+	private $nbSuccess_m = 0;
+	private $nbTest_m = 0;
+	private $lastCommentMethode = '';
 
-		const ICO_OK = "<svg width=\"20\" height=\"20\"><g><circle fill=\"#00ff00\" stroke-width=\"40\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" cx=\"10\" cy=\"10\" r=\"8\"/><path fill=\"none\" stroke=\"#7eff7e\" stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m4 11a6 6 0 0 1 2-6 6 6 0 0 1 6-2\"/><path fill=\"none\" fill-rule=\"evenodd\" stroke=\"#005700\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m14 6c-2 2-4 5-5 8l-3-3\" /></g></svg>";
+	const ICO_OK = "<svg width=\"20\" height=\"20\"><g><circle fill=\"#00ff00\" stroke-width=\"40\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" cx=\"10\" cy=\"10\" r=\"8\"/><path fill=\"none\" stroke=\"#7eff7e\" stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m4 11a6 6 0 0 1 2-6 6 6 0 0 1 6-2\"/><path fill=\"none\" fill-rule=\"evenodd\" stroke=\"#005700\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m14 6c-2 2-4 5-5 8l-3-3\" /></g></svg>";
 	const ICO_KO = "<svg width=\"20\" height=\"20\"><circle fill=\"#ff0000\" stroke-width=\"40\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" cx=\"10\" cy=\"10\" r=\"8\"/><path fill=\"none\" stroke=\"#ff7e7e\" stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m4 11a6 6 0 0 1 2-6 6 6 0 0 1 6-2\"/><path fill=\"none\" fill-rule=\"evenodd\" stroke=\"#ffffff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" d=\"m10 5l0 7\"/><circle fill=\"#ffffff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" r=\"1\" cy=\"15\" cx=\"10\"/></svg>";
 
 	function __construct() {
 		$this->class_test = get_class($this);
 	}
-	
+
 	private function startTestClass() {
-		$this->nbSuccess_c=0;
-		$this->nbTest_c   =0;
-		$this->nbSuccess_m=0;
-		$this->nbTest_m   =0;
+		$this->nbSuccess_c = 0;
+		$this->nbTest_c = 0;
+		$this->nbSuccess_m = 0;
+		$this->nbTest_m = 0;
 		$this->lastCommentMethode = '';
 	}
+
 	private function startTestMethode() {
-		$this->nbSuccess_m=0;
-		$this->nbTest_m   =0;
+		$this->nbSuccess_m = 0;
+		$this->nbTest_m = 0;
 		$this->lastCommentMethode = '';
 	}
+
 	private function getPourcentSuccessMethode() {
 		if ($this->nbTest_m == 0) {
 			return "****%";
 		} else {
 			return round(100 * $this->nbSuccess_m / $this->nbTest_m, 1) . "%";
 		}
-	}	
+	}
+
 	private function getPourcentSuccessClass() {
 		if ($this->nbTest_c == 0) {
 			return "****%";
@@ -54,6 +57,7 @@ class Test {
 			return round(100 * $this->nbSuccess_c / $this->nbTest_c, 1) . "%";
 		}
 	}
+
 	private function registerResult($result) {
 		$this->nbTest_c++;
 		$this->nbTest_m++;
@@ -62,73 +66,76 @@ class Test {
 			$this->nbSuccess_m++;
 		}
 	}
-	private function testMethode($methodeName){
+
+	private function testMethode($methodeName) {
 		$this->startTestMethode();
 		call_user_func(array($this, $methodeName));
 	}
+
 	private function addComment($comment) {
-		if($this->lastCommentMethode <> ''){
+		if ($this->lastCommentMethode <> '') {
 			$this->lastCommentMethode .= "\n";
 		}
 		$this->lastCommentMethode .= $comment;
 	}
+
 	private function testMethodeIsSuccess() {
 		return $this->nbSuccess_m == $this->nbTest_m;
 	}
+
 	private function getComment() {
 		return $this->lastCommentMethode;
 	}
-	
+
 	function run() {
 		$this->startTestClass();
 		?>
 		<div class="test_class">
 			<h3>Test de la class <span class="class_name"><?= $this->class_test; ?></span></h3>
-			<?php
-			$methodes = get_class_methods($this->class_test);
-			foreach ($methodes as $methode) {
-				if (substr($methode, 0, 6) == 'test__') {
-					$methode_name = substr($methode, 6);
-					$this->testMethode($methode);
-					?>
-			<div class="test_methode <?= ($this->testMethodeIsSuccess()) ? "ok" : "ko"; ?>">
-				<div class="test_methode_resume ihiddable"><?= $this->getPourcentSuccessMethode();?></div>
-				<p>Test de la methode <span class="methode_name"><?= $methode_name; ?></span></p>
-				<div class="test_methode_comment hiddable"><?= $this->getComment(); ?></div>
-			</div>
-					<?php
-				}
+		<?php
+		$methodes = get_class_methods($this->class_test);
+		foreach ($methodes as $methode) {
+			if (substr($methode, 0, 6) == 'test__') {
+				$methode_name = substr($methode, 6);
+				$this->testMethode($methode);
+				?>
+					<div class="test_methode <?= ($this->testMethodeIsSuccess()) ? "ok" : "ko"; ?>">
+						<div class="test_methode_resume ihiddable"><?= $this->getPourcentSuccessMethode(); ?></div>
+						<p>Test de la methode <span class="methode_name"><?= $methode_name; ?></span></p>
+						<div class="test_methode_comment hiddable"><?= $this->getComment(); ?></div>
+					</div>
+				<?php
 			}
-			?>
-			<div class="test_class_resume"><?= $this->getPourcentSuccessClass();?></div>
+		}
+		?>
+			<div class="test_class_resume"><?= $this->getPourcentSuccessClass(); ?></div>
 		</div>
 		<?php
 	}
 
-	function show_var($name, $val){
+	function show_var($name, $val) {
 		ob_start();
 		var_dump($val);
 		$contents = ob_get_contents();
 		ob_end_clean();
 		echo "<div>Variable \$$name : $contents</div>";
 	}
-	
+
 	function testEgal($elementTest, $elementComparaison, $libelle) {
 		$succes = ($elementTest == $elementComparaison);
 		if ($succes) {
 			$this->addComment("<p>" . self::ICO_OK . nl2br($libelle) . "</p>");
 		} else {
-			$message  = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
+			$message = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
 			$message .= 'La valeur attendu est : ';
-			$message .= '<tt>'.htmlentities((string)$elementComparaison).'</tt><br>';
+			$message .= '<tt>' . htmlentities((string) $elementComparaison) . '</tt><br>';
 			$message .= 'la valeur testé est : ';
-			$message .= '<tt>'.htmlentities((string)$elementTest).'</tt>';
+			$message .= '<tt>' . htmlentities((string) $elementTest) . '</tt>';
 			$message .= '</em></p>';
-			
-			$this->addComment( $message );
+
+			$this->addComment($message);
 		}
 		$this->registerResult($succes);
 	}
-
 
 }
