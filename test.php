@@ -6,9 +6,7 @@
  */
 
 use Core\Autoloader;
-use Core\Test;
-
-session_start();
+use Core\Session\Session;
 
 date_default_timezone_set('Europe/Paris');
 
@@ -26,6 +24,8 @@ $autoloader->activeCache(true)
 		->addFolder(ROOT, true)
 		->addFolder(ROOT . DS . 'lib', true)
 		->register();
+
+$SESSION = new Session();
 
 function array_union(&$array1, $array2) {
 	foreach ($array2 as $value) {
