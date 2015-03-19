@@ -30,7 +30,7 @@ class HeadSendBeforSessionException extends SessionException {
  *
  * @author fabien.sanchez
  */
-class Session implements ArrayAccess, Countable {
+class Session implements \ArrayAccess, \Countable {
 
 	Use \Core\Pattern\Singleton;
 

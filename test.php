@@ -12,17 +12,23 @@ date_default_timezone_set('Europe/Paris');
 
 define('DS', DIRECTORY_SEPARATOR);
 define('WS', '/');
-define('ROOT', __DIR__);
-define('ROOT_VUE', ROOT . DS . 'app' . DS . 'vue');
-define('WEBROOT', 'localhost');
+define('ROOT', __DIR__ . DS);
+define('ROOT_VUE', ROOT . 'app' . DS . 'vue');
+$directory = basename(ROOT);
+$tabUrl = explode($directory, $_SERVER['REQUEST_URI']);
+if (count($tabUrl) > 1) {
+	define('WEBROOT', $tabUrl[0] . $directory . WS);
+} else {
+	define('WEBROOT', WS);
+}
 
-require ROOT . DS . 'core' . DS . 'autoloader.class.php';
+require ROOT . 'core' . DS . 'autoloader.class.php';
 $autoloader = new Autoloader();
 $autoloader->activeCache(true)
 		->addExtension('.php')
 		->addExtension('.class.php')
 		->addFolder(ROOT, true)
-		->addFolder(ROOT . DS . 'lib', true)
+		->addFolder(ROOT . 'lib', true)
 		->register();
 
 $SESSION = new Session();
@@ -44,7 +50,10 @@ function scanFolder($folder) {
 				scanFolder($fsoFull);
 			} elseif (is_file($fsoFull)) {
 				if (substr($fso, 0, 6) == 'test__' && substr($fso, -4) == '.php') {
-					echo "<p>$fsoFull</p>\n";
+					$urlFso = urlencode(
+							str_replace(ROOT, '{ROOT}', $fsoFull)
+					);
+					echo "<p><a href=\"/showFile.php?f=$urlFso\">$fso</a></p>\n";
 					require $fsoFull;
 				}
 			}
@@ -172,4 +181,4 @@ register_tick_function($profile);
 
 runTest(['core', 'app']);
 
-file_put_contents(ROOT . DS . 'utilisation_fichier.txt', serialize($tab));
+file_put_contents(ROOT . 'utilisation_fichier.txt', serialize($tab));
