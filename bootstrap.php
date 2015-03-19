@@ -23,4 +23,5 @@ $autoloader->activeCache(true)
 (new App('Mon site'))
     ->run();
 
-// unset($autoloader);
+// utile pour être sur de passer dans le destructeur de l'autoloader.
+unset($autoloader);

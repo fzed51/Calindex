@@ -1,0 +1,12 @@
+<?php
+namespace Core\Console;
+
+function pause(){ echo "\nTapper [entr‚e] pour continuer ..."; fgetc(STDIN); }
+
+echo "donner le nom du fichier … scanner ? ";
+$fileName = fgets(STDIN);
+$content = file_get_contents($fileName);
+
+echo $content;
+
+pause();
