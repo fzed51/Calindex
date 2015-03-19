@@ -1,12 +1,43 @@
 <?php
-namespace Core\Console;
+//namespace Core\Console;
 
 function pause(){ echo "\nTapper [entr‚e] pour continuer ..."; fgetc(STDIN); }
+define ('DS', DIRECTORY_SEPARATOR);
+define ('ROOT', __DIR__.DS.'..'.DS.'..');
 
-echo "donner le nom du fichier … scanner ? ";
-$fileName = fgets(STDIN);
-$content = file_get_contents($fileName);
+require ROOT.DS.'core'.DS.'autoloader.class.php';
 
-echo $content;
+pause();
+$autoloader = new Core\Autoloader();
+$autoloader->activeCache(true)
+    ->addExtension('.php')
+    ->addExtension('.class.php')
+    ->addFolder(ROOT, true)
+    ->register();
+
+var_dump($argv);
+if(isset($argv[1])){
+	$fileName = $argv[1];
+}else{
+	echo "donner le nom du fichier … scanner ? ";
+	$fileName = fgets(STDIN);
+}
+
+$class_avant = get_declared_classes();
+if ( is_file($fileName)){
+	echo "$fileName est charg‚";
+	pause();
+	include ($fileName);
+} else {
+	echo "Impossible de trouver le fichier $fileName";
+}
+
+$class_apres = get_declared_classes();
+
+$nouvelle_class = array_diff($class_apres, $class_avant);
+
+///var_dump($class_avant);
+//var_dump($class_apres);
+var_dump($nouvelle_class);
 
 pause();
