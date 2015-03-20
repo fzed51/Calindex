@@ -15,7 +15,7 @@ define('WS', '/');
 define('ROOT', __DIR__ . DS);
 define('ROOT_VUE', ROOT . 'app' . DS . 'vue');
 $directory = basename(ROOT);
-$tabUrl = explode($directory, $_SERVER['REQUEST_URI']);
+$tabUrl = explode($directory, filter_input(INPUT_SERVER , 'REQUEST_URI', FILTER_SANITIZE_URL));
 if (count($tabUrl) > 1) {
 	define('WEBROOT', $tabUrl[0] . $directory . WS);
 } else {
