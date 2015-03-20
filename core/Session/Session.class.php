@@ -38,7 +38,9 @@ class Session implements \ArrayAccess, \Countable {
 		$file = '';
 		$line = 0;
 		if (!headers_sent($file, $line)) {
-			session_start();
+			if (!self::status()) {
+				session_start();
+			}
 		} else {
 			throw new HeadSendBeforSessionException($file, $line);
 		}
@@ -86,6 +88,17 @@ class Session implements \ArrayAccess, \Countable {
 
 	private function set($key, $value) {
 		$_SERVER[$key] = $value;
+	}
+
+	static private function status() {
+		if (php_sapi_name() !== 'cli') {
+			if (version_compare(phpversion(), '5.4.0', '>=')) {
+				return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+			} else {
+				return session_id() === '' ? FALSE : TRUE;
+			}
+		}
+		return false;
 	}
 
 }

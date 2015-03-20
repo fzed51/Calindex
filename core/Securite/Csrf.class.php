@@ -18,43 +18,43 @@ use Core\Session\Session;
  */
 class Csrf {
 
-    const IDSESSION = "__SECURITE__CSRF__";
+	const IDSESSION = "__SECURITE__CSRF__";
 
-    private $session;
-    private $jeton;
+	private $session;
+	private $jeton;
 
-    private function __construct() {
-        $this->session = Session::getInstance();
-        $this->generate();
-    }
+	public function __construct() {
+		$this->session = Session::getInstance();
+		$this->generate();
+	}
 
-    public function generate($force = false) {
-        if (!$force && isset($this->session[self::IDSESSION])) {
-            $this->jeton = $this->session[self::IDSESSION];
-        } else {
-            $this->jeton = hash('sha256', uniqid() . '-' . self::class . '-' . self::IDSESSION . '-' . (string) time());
-            $this->session[self::IDSESSION] = $this->jeton;
-        }
-    }
+	public function generate($force = false) {
+		if (!$force && isset($this->session[self::IDSESSION])) {
+			$this->jeton = $this->session[self::IDSESSION];
+		} else {
+			$this->jeton = hash('sha256', uniqid() . '-' . self::class . '-' . self::IDSESSION . '-' . (string) time());
+			$this->session[self::IDSESSION] = $this->jeton;
+		}
+	}
 
-    public function getAttrb() {
-        return 'csrf=' . $this->jeton;
-    }
+	public function getAttrb() {
+		return 'csrf=' . $this->jeton;
+	}
 
-    public function getInput() {
-        $form = new Form();
-        return $form->hidden('csrf', $this->jeton);
-    }
+	public function getInput() {
+		$form = new Form();
+		return $form->hidden('csrf', $this->jeton);
+	}
 
-    function check($redirect = true, $csrfTest = null) {
-        if (is_null($csrfTest) and ( isset($_POST['csrf']) xor isset($_GET['csrf']))) {
-            $csrfTest = isset($_POST['csrf']) ? $_POST['csrf'] : $_GET['csrf'];
-        }
-        if ($redirect) {
-            if ($this->jeton === $csrfTest) {
-                
-            }
-        }
-    }
+	function check($redirect = true, $csrfTest = null) {
+		if (is_null($csrfTest) and ( isset($_POST['csrf']) xor isset($_GET['csrf']))) {
+			$csrfTest = isset($_POST['csrf']) ? $_POST['csrf'] : $_GET['csrf'];
+		}
+		if ($redirect) {
+			if ($this->jeton === $csrfTest) {
+
+			}
+		}
+	}
 
 }
