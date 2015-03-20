@@ -133,7 +133,6 @@ function runTest(array $folders) {
 				<div class="tests_liste">
 					<?php
 					// recherche des class de test
-
 					$liste_class_chargee = get_declared_classes();
 					foreach ($liste_class_chargee as $class) {
 						if (is_subclass_of($class, 'Core\Test')) {

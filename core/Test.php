@@ -92,22 +92,22 @@ class Test {
 		?>
 		<div class="test_class">
 			<h3>Test de la class <span class="class_name"><?= $this->class_test; ?></span></h3>
-		<?php
-		$methodes = get_class_methods($this->class_test);
-		foreach ($methodes as $methode) {
-			if (substr($methode, 0, 6) == 'test__') {
-				$methode_name = substr($methode, 6);
-				$this->testMethode($methode);
-				?>
+			<?php
+			$methodes = get_class_methods($this->class_test);
+			foreach ($methodes as $methode) {
+				if (substr($methode, 0, 6) == 'test__') {
+					$methode_name = substr($methode, 6);
+					$this->testMethode($methode);
+					?>
 					<div class="test_methode <?= ($this->testMethodeIsSuccess()) ? "ok" : "ko"; ?>">
 						<div class="test_methode_resume ihiddable"><?= $this->getPourcentSuccessMethode(); ?></div>
 						<p>Test de la methode <span class="methode_name"><?= $methode_name; ?></span></p>
 						<div class="test_methode_comment hiddable"><?= $this->getComment(); ?></div>
 					</div>
-				<?php
+					<?php
+				}
 			}
-		}
-		?>
+			?>
 			<div class="test_class_resume"><?= $this->getPourcentSuccessClass(); ?></div>
 		</div>
 		<?php

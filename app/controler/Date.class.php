@@ -33,6 +33,8 @@ class Date {
 	];
 	static public $culture = 'fr';
 	private $year;
+	private $month;
+	private $day;
 
 	private function set_year(/* int */$year) {
 		$this->year = (int) $year;
@@ -42,20 +44,31 @@ class Date {
 		return $this->year;
 	}
 
-	private $month;
-
 	private function set_month(/* int */$month) {
-		$this->month = (int) $month;
+		$month = (int) $month;
+		if ($month > 12) {
+			$month -= 12;
+			$this->set_year($this->year + 1);
+			$this->set_month($month);
+		} else {
+			$this->month = $month;
+			$this->set_day($this->day);
+		}
 	}
 
 	private function get_month() {
 		return $this->month;
 	}
 
-	private $day;
-
 	private function set_day(/* int */$day) {
-		$this->day = (int) $day;
+		$day = (int) $day;
+		if ($day > self::nb_jours_mois($this->year, $this->month)) {
+			$day -= self::nb_jours_mois($this->year, $this->month);
+			$this->set_month($this->month + 1);
+			$this->set_day($day);
+		} else {
+			$this->day = $day;
+		}
 	}
 
 	private function get_day() {
@@ -273,12 +286,10 @@ class Date {
 	static public function jour_semaine($y, $m, $d) {
 		$D = 0;
 		if ($m >= 3) {
-			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($y / 4)) -
-					((int) ($y / 100)) + ((int) ($y / 400)) - 2 );
+			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($y / 4)) - ((int) ($y / 100)) + ((int) ($y / 400)) - 2 );
 		} else {
 			$z = $y - 1;
-			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($z / 4)) -
-					((int) ($z / 100)) + ((int) ($z / 400)) );
+			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($z / 4)) - ((int) ($z / 100)) + ((int) ($z / 400)) );
 		}
 		return (($D - 1) % 7) + 1;
 	}
@@ -336,11 +347,11 @@ class Date {
 	}
 
 	public function compare(Date $jour) {
-		$j1 = (int) $this->format();
-		$j2 = (int) $jour->format();
+		$j1 = $this->day + (100 * $this->month) + (10000 * $this->year);
+		$j2 = $jour->day + (100 * $jour->month) + (10000 * $jour->year);
 		$diff = $j1 - $j2;
 
-		return (!$diff) ? 0 : $diff / abs($diff);
+		return ($diff == 0) ? 0 : $diff / abs($diff);
 	}
 
 }
