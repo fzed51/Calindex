@@ -33,8 +33,6 @@ class Date {
 	];
 	static public $culture = 'fr';
 	private $year;
-	private $month;
-	private $day;
 
 	private function set_year(/* int */$year) {
 		$this->year = (int) $year;
@@ -44,31 +42,20 @@ class Date {
 		return $this->year;
 	}
 
+	private $month;
+
 	private function set_month(/* int */$month) {
-		$month = (int) $month;
-		if ($month > 12) {
-			$month -= 12;
-			$this->set_year($this->year + 1);
-			$this->set_month($month);
-		} else {
-			$this->month = $month;
-			$this->set_day($this->day);
-		}
+		$this->month = (int) $month;
 	}
 
 	private function get_month() {
 		return $this->month;
 	}
 
+	private $day;
+
 	private function set_day(/* int */$day) {
-		$day = (int) $day;
-		if ($day > self::nb_jours_mois($this->year, $this->month)) {
-			$day -= self::nb_jours_mois($this->year, $this->month);
-			$this->set_month($this->month + 1);
-			$this->set_day($day);
-		} else {
-			$this->day = $day;
-		}
+		$this->day = (int) $day;
 	}
 
 	private function get_day() {
@@ -97,10 +84,11 @@ class Date {
 	}
 
 	public function __toString() {
-		return \sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
+		$toString = sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
+		return $toString;
 	}
 
-	public function add_day($nb_day, $clone = false) {
+	public function add_day($nb_day, $clone = false, $dbg = false) {
 		if ($clone) {
 			$date = clone $this;
 		} else {
@@ -109,24 +97,17 @@ class Date {
 		if ($nb_day == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_day > 0) {
-			for ($p = 0; $p < $nb_day; $p++) {
-				$day++;
-				if ($day > self::nb_jours_mois($year, $month)) {
-					$day = 1;
-					$month++;
-					if ($month > 12) {
-						$month = 1;
-						$year++;
-					}
+			if (($date->day + $nb_day) > self::nb_jours_mois($date->year, $this->month)) {
+				if ($dbg) {
+					echo "<!-- {$this->day}/{$this->month}/{$this->year} + $nb_day -->\n";
 				}
+				$nb_day -= self::nb_jours_mois($date->year, $this->month);
+				$date->add_month(1);
+				$date->add_day($nb_day, false, $dbg);
+			} else {
+				$date->day += $nb_day;
 			}
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->sub_day(abs($nb_day));
 		}
@@ -142,24 +123,14 @@ class Date {
 		if ($nb_day == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_day > 0) {
-			for ($p = 0; $p < $nb_day; $p++) {
-				$day++;
-				if ($day < 1) {
-					$month--;
-					if ($month < 1) {
-						$month = 12;
-						$year--;
-					}
-					$day = self::nb_jours_mois($year, $month);
-				}
+			if (($date->day - $nb_day) < 1) {
+				$date->sub_month(1);
+				$nb_day -= self::nb_jours_mois($date->year, $this->month);
+				$date->sub_day($nb_day);
+			} else {
+				$date->day -= $nb_day;
 			}
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->add_day(abs($nb_day));
 		}
@@ -175,21 +146,15 @@ class Date {
 		if ($nb_month == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_month > 0) {
-			while ($nb_month-- > 0) {
-				$month++;
-				if ($month > 12) {
-					$month = 1;
-					$year++;
-				}
+			if (($date->month + $nb_month) > 12) {
+				$nb_month = $date->month + $nb_month - 12;
+				$date->year ++;
+				$date->add_month($nb_month);
+			} else {
+				$date->month += $nb_month;
+				$day = $this->day;
 			}
-			$day = min($day, self::nb_jours_mois($year, $month));
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->sub_month(abs($nb_month));
 		}
@@ -205,21 +170,15 @@ class Date {
 		if ($nb_month == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_month > 0) {
-			while ($nb_month-- > 0) {
-				$month--;
-				if ($month < 1) {
-					$month = 12;
-					$year--;
-				}
+			if (($date->month - $nb_month) < 1) {
+				$nb_month -= 12;
+				$date->year --;
+				$date->sub_month($nb_month);
+			} else {
+				$date->month = $nb_month;
+				$day = $this->day;
 			}
-			$day = min($day, self::nb_jours_mois($year, $month));
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->add_month(abs($nb_month));
 		}

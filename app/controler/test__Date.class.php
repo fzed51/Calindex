@@ -36,8 +36,11 @@ class test__Date extends \Core\Test {
 		$this->testEgal($oDate2c, '20140521', 'add_day avec clone, control du clone');
 
 		$oDate3 = new Date('20140220');
-		$oDate3->add_day(4000);
-		$this->testEgal($oDate3, '20250202', 'add_day 4000 jours');
+		$oDate3->add_day(4000, false, true);
+		$tDate = new \DateTime();
+		$tDate->setDate(2014, 5, 20);
+		$tDate->modify('+ 4000 day');
+		$this->testEgal($oDate3, $tDate->format("Ymd"), 'add_day 4000 jours');
 	}
 
 	function test__add_month() {
