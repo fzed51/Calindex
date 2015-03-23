@@ -56,6 +56,7 @@ class Flash {
 			$content .= str_replace('{$message}', $flash['message'], str_replace('{$type}', $flash['type'], $this->layoutFlash));
 		}
 		$toString = str_replace('{$content}', $content, $this->layoutMaster);
+		$this->raz();
 		return $toString;
 	}
 
@@ -65,6 +66,10 @@ class Flash {
 
 	public function affiche() {
 		echo $this->__toString();
+	}
+
+	public function raz() {
+		unset($this->Session[self::IDSESSION]);
 	}
 
 }
