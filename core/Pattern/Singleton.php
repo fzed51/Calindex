@@ -13,16 +13,16 @@ namespace Core\Pattern;
  *
  * @author fabien.sanchez
  */
+trait Singleton {
 
-trait Singleton
-{
-    private static $__instance = null;
+	private static $__instance = null;
 
-    public static function getInstance()
-    {
-        if( self::$__instance === null ){
-            self::$__instance = new self();
-        }
-        return self::$__instance;
-    }
+	public static function getInstance() {
+		if (self::$__instance === null) {
+			$call = get_called_class();
+			self::$__instance = new $call();
+		}
+		return self::$__instance;
+	}
+
 }
