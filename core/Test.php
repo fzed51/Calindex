@@ -113,17 +113,18 @@ class Test {
 		<?php
 	}
 
-	function show_var($name, $val) {
+	function show_var($name) {
+		global $$name;
 		ob_start();
-		var_dump($val);
+		var_dump($$name);
 		$contents = ob_get_contents();
 		ob_end_clean();
 		echo "<div>Variable \$$name : $contents</div>";
 	}
 
 	function testEgal($elementTest, $elementComparaison, $libelle) {
-		$succes = ($elementTest == $elementComparaison);
-		if ($succes) {
+		$success = ($elementTest == $elementComparaison);
+		if ($success) {
 			$this->addComment("<p>" . self::ICO_OK . nl2br($libelle) . "</p>");
 		} else {
 			$message = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
@@ -135,7 +136,36 @@ class Test {
 
 			$this->addComment($message);
 		}
-		$this->registerResult($succes);
+		$this->registerResult($success);
+	}
+
+	function testThrowException(callable $callback, $Exception, $libelle, $param_arr = []) {
+		$success = false;
+		$ReturnException = '';
+		try {
+			call_user_func_array($callback, $param_arr);
+		} catch (\Exception $ex) {
+			$ReturnException = get_class($ex);
+			$success = strcmp($Exception, $ReturnException) === 0;
+		}
+		if ($success) {
+			$this->addComment("<p>" . self::ICO_OK . nl2br($libelle) . "</p>");
+		} else {
+			$message = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
+			$message .= 'L\'exception attendu est : ';
+			$message .= '<tt>' . htmlentities((string) $Exception) . '</tt><br>';
+			if ($ReturnException == '') {
+				$message .= 'l\'élément testé ne renvoie pas d\'exception';
+				$message .= '</em></p>';
+			} else {
+				$message .= 'l\'exception retournée est : ';
+				$message .= '<tt>' . htmlentities($ReturnException) . '</tt>';
+				$message .= '</em></p>';
+			}
+
+			$this->addComment($message);
+		}
+		$this->registerResult($success);
 	}
 
 }
