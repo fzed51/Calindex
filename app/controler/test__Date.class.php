@@ -23,6 +23,8 @@ class test__Date extends \Core\Test {
 
 		$oDate4 = new Date('20140220');
 		$this->testEgal($oDate4, "20140220", "__construct avec une date en paramètre");
+
+		$this->testThrowException([$oDate4, "__construct"], DateNotValidException::class, 'Le 32 janvier n\'est pas une date valide', ['20150132']);
 	}
 
 	function test__add_day() {
@@ -230,21 +232,21 @@ class test__Date extends \Core\Test {
 	}
 
 	function test__static_ascension() {
-		$this->testEgal(Date::ascension(2015), '20150406', 'en 2015 l\'ascension est le 5 avril');
-		$this->testEgal(Date::ascension(2016), '20160328', 'en 2016 l\'ascension est le 27 mars');
-		$this->testEgal(Date::ascension(2017), '20170417', 'en 2017 l\'ascension est le 16 avril');
+		$this->testEgal(Date::ascension(2015), '20150514', 'en 2015 l\'ascension est le 5 avril');
+		$this->testEgal(Date::ascension(2016), '20160505', 'en 2016 l\'ascension est le 27 mars');
+		$this->testEgal(Date::ascension(2017), '20170525', 'en 2017 l\'ascension est le 16 avril');
 	}
 
 	function test__static_pentecote() {
-		$this->testEgal(Date::pentecote(2015), '20150406', 'en 2015 pentecote est le 5 avril');
-		$this->testEgal(Date::pentecote(2016), '20160328', 'en 2016 pentecote est le 27 mars');
-		$this->testEgal(Date::pentecote(2017), '20170417', 'en 2017 pentecote est le 16 avril');
+		$this->testEgal(Date::pentecote(2015), '20150525', 'en 2015 pentecote est le 5 avril');
+		$this->testEgal(Date::pentecote(2016), '20160516', 'en 2016 pentecote est le 27 mars');
+		$this->testEgal(Date::pentecote(2017), '20170605', 'en 2017 pentecote est le 16 avril');
 	}
 
 	function test__static_jour_semaine() {
-		$this->testEgal(Date::jour_semaine(2015, 1, 1), 1, 'le 1er janvier 2015 est un ');
-		$this->testEgal(Date::jour_semaine(2016, 1, 1), 2, 'le 1er janvier 2016 est un ');
-		$this->testEgal(Date::jour_semaine(2017, 1, 1), 3, 'le 1er janvier 2017 est un ');
+		$this->testEgal(Date::jour_semaine(2015, 1, 1), 4, 'le 1er janvier 2015 est un ');
+		$this->testEgal(Date::jour_semaine(2016, 1, 1), 5, 'le 1er janvier 2016 est un ');
+		$this->testEgal(Date::jour_semaine(2017, 1, 1), 7, 'le 1er janvier 2017 est un ');
 	}
 
 }
