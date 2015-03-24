@@ -17,19 +17,19 @@ class Date {
 	use GetterSetter;
 
 	static private $dico = [
-		'fr' => [
-			'mois' => ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-			'mois_abr' => ['jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
-			'jour' => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
-			'jour_abr' => ['lu.', 'ma.', 'me.', 'je.', 've.', 'sa.', 'di.']
-		],
-		// TODO: ajoute la culture english
-		'en' => [
-			'mois' => ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
-			'mois_abr' => ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-			'jour' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			'jour_abr' => ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
-		],
+			'fr' => [
+					'mois' => ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+					'mois_abr' => ['jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
+					'jour' => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
+					'jour_abr' => ['lu.', 'ma.', 'me.', 'je.', 've.', 'sa.', 'di.']
+			],
+			// TODO: ajoute la culture english
+			'en' => [
+					'mois' => ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
+					'mois_abr' => ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+					'jour' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+					'jour_abr' => ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+			],
 	];
 	static public $culture = 'fr';
 	private $year;
