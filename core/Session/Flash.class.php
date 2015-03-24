@@ -18,8 +18,8 @@ class Flash
 
 	protected function __construct(){
 		$this->Session = Session::getInstance();
-		if (!isset($this->Session[self::IDSESSION]) || !is_array($this->Session[self::IDSESSION])){
-			$this->Session[self::IDSESSION] = [];
+		if (!isset($this->Session[IDSESSION]) || !is_array($this->Session[IDSESSION])){
+			$this->Session[IDSESSION] = [];
 		}
 	}
 
@@ -40,22 +40,11 @@ class Flash
 
 	public function set($message, $type = ''){
 		if(empty($type)){$type = $this->defaultType;}
-		array_push($this->Session[self::IDSESSION], ["type"=>$type, "message"=> $message])
+		array_push($this->Session[IDSESSION], ["type"=>$type, "message"=> $message])
 	}
 
 	public function __toString(){
-		$content = "";
-		foreach ($this->Session[self::IDSESSION] as $flash) {
-			content .= str_replace('{$message}', $flash['message'],
-				str_replace('{$type}', $flash['type'], $this->layoutFlash)
-				);
-		}
-		$toString = str_replace('{$content}', $content, $this->layoutMaster);
-		return $toString;
+		
 	} 
-
-	public function render(){
-		return $this->__toString();
-	}
 
 } 

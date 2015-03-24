@@ -29,7 +29,3 @@ prepros.cfg
 # Projet
 # ------
 cache_autoloader
-
-# Sublime Text 3
-# --------------
-*.sublime-*
