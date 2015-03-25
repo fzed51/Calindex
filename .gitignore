@@ -66,6 +66,6 @@ prepros.cfg
 
 # Projet
 # ------
-cache_autoloader
 *log.txt
 *srl.txt
+cache.*
