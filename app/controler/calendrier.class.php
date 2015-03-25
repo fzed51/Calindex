@@ -46,12 +46,12 @@ class Calendrier {
 		if (count($this->jours_ferier) == 0) {
 			$annee = $this->annee;
 			$feries = [];
-			$feries[] = Date::make($annee, 01, 01);
-			$feries[] = Date::make($annee, 05, 01);
-			$feries[] = Date::make($annee, 05, 08);
-			$feries[] = Date::make($annee, 07, 14);
-			$feries[] = Date::make($annee, 08, 15);
-			$feries[] = Date::make($annee, 11, 01);
+			$feries[] = Date::make($annee, 1, 1);
+			$feries[] = Date::make($annee, 5, 1);
+			$feries[] = Date::make($annee, 5, 8);
+			$feries[] = Date::make($annee, 7, 14);
+			$feries[] = Date::make($annee, 8, 15);
+			$feries[] = Date::make($annee, 11, 1);
 			$feries[] = Date::make($annee, 11, 11);
 			$feries[] = Date::make($annee, 12, 24);
 			$feries[] = Date::lundi_paques($annee);
@@ -72,16 +72,14 @@ class Calendrier {
 	}
 
 	private function make_vacances() {
-		$ch = curl_init();
-		$source = 'http://www.education.gouv.fr/download.php?file=http%3A%2F%2Fcache.media.education.gouv.fr%2Fics%2FCalendrier_Scolaire_Zones_A_B_C.ics&submit=';
-		curl_setopt($ch, CURLOPT_URL, $source);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$data = curl_exec($ch);
-		curl_close($ch);
-		$destination = ROOT_TMP . "cacheVacances.ics";
-		$file = fopen($destination, "w+");
-		fputs($file, $data);
-		fclose($file);
+		$fichier_cache_calendrier = ROOT_TMP . 'cache.calendrier_vacances.ics';
+		if (!is_file($fichier_cache_calendrier) || (time() - filemtime($fichier_cache_calendrier)) > (4 * 7 * 24 * 60 * 60)) {
+			$url = \Core\Helper\Config::get('CALENDRIER_VACANCES', 'http://www.education.gouv.fr/download.php?file=http%3A%2F%2Fcache.media.education.gouv.fr%2Fics%2FCalendrier_Scolaire_Zones_A_B_C.ics&submit=');
+			$content = file_get_contents($url);
+			file_put_contents($fichier_cache_calendrier, $content);
+		} else {
+			file_get_contents($fichier_cache_calendrier);
+		}
 	}
 
 	private function getInfos() {
