@@ -116,7 +116,7 @@ class Autoloader {
 				"cached" => False
 		];
 		$options = array_merge($defaut, $option);
-		$this->cache_file_name = LIB . DS . 'cache_autoloader';
+		$this->cache_file_name = LIB . DS . 'cache.autoloader';
 		if (isset($options['extension'])) {
 			if (is_array($options['extension'])) {
 				$this->extension = $options['extension'];
