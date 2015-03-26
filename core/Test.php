@@ -92,38 +92,39 @@ class Test {
 		?>
 		<div class="test_class">
 			<h3>Test de la class <span class="class_name"><?= $this->class_test; ?></span></h3>
-		<?php
-		$methodes = get_class_methods($this->class_test);
-		foreach ($methodes as $methode) {
-			if (substr($methode, 0, 6) == 'test__') {
-				$methode_name = substr($methode, 6);
-				$this->testMethode($methode);
-				?>
+			<?php
+			$methodes = get_class_methods($this->class_test);
+			foreach ($methodes as $methode) {
+				if (substr($methode, 0, 6) == 'test__') {
+					$methode_name = substr($methode, 6);
+					$this->testMethode($methode);
+					?>
 					<div class="test_methode <?= ($this->testMethodeIsSuccess()) ? "ok" : "ko"; ?>">
 						<div class="test_methode_resume ihiddable"><?= $this->getPourcentSuccessMethode(); ?></div>
 						<p>Test de la methode <span class="methode_name"><?= $methode_name; ?></span></p>
 						<div class="test_methode_comment hiddable"><?= $this->getComment(); ?></div>
 					</div>
-				<?php
+					<?php
+				}
 			}
-		}
-		?>
+			?>
 			<div class="test_class_resume"><?= $this->getPourcentSuccessClass(); ?></div>
 		</div>
 		<?php
 	}
 
-	function show_var($name, $val) {
+	function show_var($name) {
+		global $$name;
 		ob_start();
-		var_dump($val);
+		var_dump($$name);
 		$contents = ob_get_contents();
 		ob_end_clean();
 		echo "<div>Variable \$$name : $contents</div>";
 	}
 
 	function testEgal($elementTest, $elementComparaison, $libelle) {
-		$succes = ($elementTest == $elementComparaison);
-		if ($succes) {
+		$success = ($elementTest == $elementComparaison);
+		if ($success) {
 			$this->addComment("<p>" . self::ICO_OK . nl2br($libelle) . "</p>");
 		} else {
 			$message = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
@@ -135,7 +136,36 @@ class Test {
 
 			$this->addComment($message);
 		}
-		$this->registerResult($succes);
+		$this->registerResult($success);
+	}
+
+	function testThrowException(callable $callback, $Exception, $libelle, $param_arr = []) {
+		$success = false;
+		$ReturnException = '';
+		try {
+			call_user_func_array($callback, $param_arr);
+		} catch (\Exception $ex) {
+			$ReturnException = get_class($ex);
+			$success = strcmp($Exception, $ReturnException) === 0;
+		}
+		if ($success) {
+			$this->addComment("<p>" . self::ICO_OK . nl2br($libelle) . "</p>");
+		} else {
+			$message = "<p>" . self::ICO_KO . nl2br($libelle) . '<br><em>';
+			$message .= 'L\'exception attendu est : ';
+			$message .= '<tt>' . htmlentities((string) $Exception) . '</tt><br>';
+			if ($ReturnException == '') {
+				$message .= 'l\'élément testé ne renvoie pas d\'exception';
+				$message .= '</em></p>';
+			} else {
+				$message .= 'l\'exception retournée est : ';
+				$message .= '<tt>' . htmlentities($ReturnException) . '</tt>';
+				$message .= '</em></p>';
+			}
+
+			$this->addComment($message);
+		}
+		$this->registerResult($success);
 	}
 
 }

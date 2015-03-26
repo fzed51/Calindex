@@ -1,4 +1,5 @@
 <?php
+
 namespace Core;
 
 use DateTime;
@@ -9,31 +10,38 @@ use Exception;
  */
 
 
-if(!defined('LIB')){
+if (!defined('LIB')) {
 	define('LIB', __DIR__);
 }
-if(!defined('DS')){
+if (!defined('DS')) {
 	define('DS', '\\');
 }
 
-class AutoloaderException extends Exception {}
+class AutoloaderException extends Exception {
+
+}
 
 class NotFoundClassException extends AutoloaderException {
+
 	private $className;
-	public function __construct ($className, $code=NULL, $previous=NULL) {
+
+	public function __construct($className, $code = NULL, $previous = NULL) {
 		$this->className = $className;
-		parent::__construct("Impossible de charger la classe $className", 
-				$code, $previous);
+		parent::__construct("Impossible de charger la classe $className", $code, $previous);
 	}
+
 }
 
 class NotFoundFolder extends AutoloaderException {
+
 	private $folder;
-	public function __construct ($folder, $code=NULL, $previous=NULL) {
+
+	public function __construct($folder, $code = NULL, $previous = NULL) {
 		$this->folder = $folder;
 		parent::__construct("Impossible d'ajouter le dossier '$folder' à la "
 				. "bibliothèque de librairie!", $code, $previous);
-	}	
+	}
+
 }
 
 /**
@@ -48,29 +56,28 @@ class NotFoundFolder extends AutoloaderException {
 class Autoloader {
 
 	/**
-	 * @access protected 
+	 * @access protected
 	 * @var string[string] $class_files chemin des classes
 	 */
 	protected $class_files = array();
 
 	/**
-	 * @access protected 
+	 * @access protected
 	 * @var string[] $log log de debbugage
 	 */
 	protected $log = array();
 
 	/**
-	 * @access protected 
+	 * @access protected
 	 * @var string[] $search_folders chemin dans les quel l'autoloader cherche les classes
 	 */
 	protected $search_folders = array();
 
 	/**
 	 *
-	 * @var string[string] 
+	 * @var string[string]
 	 */
 	protected $scanned_file = array();
-
 
 	/**
 	 * @access protected
@@ -90,7 +97,6 @@ class Autoloader {
 	 *    classe non trouvée
 	 */
 	protected $throw = True;
-
 	protected $cached = False;
 
 	/**
@@ -104,23 +110,23 @@ class Autoloader {
 	 */
 	function __construct(array $option = []) {
 		$defaut = [
-			"register" => false,
-			"extension" => array(".class.php"),
-			"throw" => True,
-			"cached" => False
+				"register" => false,
+				"extension" => array(".class.php"),
+				"throw" => True,
+				"cached" => False
 		];
 		$options = array_merge($defaut, $option);
-		$this->cache_file_name = LIB.DS.'cache_autoloader';
-		if(isset($options['extension'])){
-			if(is_array($options['extension'])){
+		$this->cache_file_name = LIB . DS . 'cache.autoloader';
+		if (isset($options['extension'])) {
+			if (is_array($options['extension'])) {
 				$this->extension = $options['extension'];
 			} else {
 				$this->extension = array($options['extension']);
 			}
 		}
-		$this->throw = (bool)$options['throw'];
-		$this->cached = (bool)$options['cached'];
-		if(isset($options['register']) && $options['register']) {
+		$this->throw = (bool) $options['throw'];
+		$this->cached = (bool) $options['cached'];
+		if (isset($options['register']) && $options['register']) {
 			$this->register();
 		}
 	}
@@ -142,23 +148,25 @@ class Autoloader {
 		array_push($this->log, $finalLog);
 	}
 
-	/***
+	/*	 * *
 	 * @param string $folder
 	 * @param bool $FullPath
 	 * @return $this
 	 * @throws NotFoundFolder
 	 */
-	function addFolder(/*string*/$folder, /*bool*/$FullPath=false) {
-		if(!$FullPath){$folder = LIB . DS . $folder;}
-		if(!is_dir($folder)){
+
+	function addFolder(/* string */$folder, /* bool */ $FullPath = false) {
+		if (!$FullPath) {
+			$folder = LIB . DS . $folder;
+		}
+		if (!is_dir($folder)) {
 			$this->log("[ERROR] Impossible de trouver le dossier $folder");
 			throw new NotFoundFolder($folder);
 		}
-		if(!in_array($folder, $this->search_folders)) {
+		if (!in_array($folder, $this->search_folders)) {
 			$this->scanned_file = array_merge(
-					$this->scanned_file, 
-					$this->scanFolder($folder)
-					);
+					$this->scanned_file, $this->scanFolder($folder)
+			);
 			array_push($this->search_folders, $folder);
 		}
 		return $this;
@@ -169,17 +177,17 @@ class Autoloader {
 	 * @param $extension
 	 * @return Autoloader
 	 */
-	function addExtension (/*string*/$extension) {
-		if($extension[0] != '.'){
-			$extension = '.'.$extension;
+	function addExtension(/* string */$extension) {
+		if ($extension[0] != '.') {
+			$extension = '.' . $extension;
 		}
-		if(!in_array($extension, $this->extension)) {
+		if (!in_array($extension, $this->extension)) {
 			array_push($this->extension, $extension);
 		}
 		return $this;
 	}
-	
-	function addParentFolder(){
+
+	function addParentFolder() {
 		return $this->addFolder(__DIR__, true);
 	}
 
@@ -202,7 +210,7 @@ class Autoloader {
 				require $filePath;
 			} else {
 				$this->log("[ERROR] Impossible de charger la classe $className");
-				if($this->throw){
+				if ($this->throw) {
 					throw new NotFoundClassException($className);
 				}
 			}
@@ -213,15 +221,15 @@ class Autoloader {
 	 * @param $className
 	 * @return string
 	 */
-	protected function SearchClassInFolders(/*string*/ $className) {
+	protected function SearchClassInFolders(/* string */ $className) {
 		/* string */ $filePath = "";
-		foreach ($this->search_folders as /*string*/ $folder) {
-			foreach ($this->extension as /*string*/ $extension){
+		foreach ($this->search_folders as /* string */ $folder) {
+			foreach ($this->extension as /* string */ $extension) {
 				$file = $folder . DS . strtolower($className) . $extension;
-				if (isset ($this->scanned_file[strtolower($file)])) {
+				if (isset($this->scanned_file[strtolower($file)])) {
 					$filePath = $this->scanned_file[strtolower($file)];
-				}elseif (file_exists($file)){					
-					$filePath = $file ;
+				} elseif (file_exists($file)) {
+					$filePath = $file;
 				}
 			}
 		}
@@ -233,27 +241,27 @@ class Autoloader {
 	 * @return array
 	 * @throws NotFoundFolder
 	 */
-	protected function scanFolder (/*string*/$folder){
+	protected function scanFolder(/* string */$folder) {
 		$liste = array();
-		$skipItem = array('.','..','.git', '.idea', 'nbproject');
+		$skipItem = array('.', '..', '.git', '.idea', 'nbproject');
 		$matchExtension = function($file, $ext) {
 			$lExt = strlen($ext);
 			return (substr($file, -$lExt) === $ext);
 		};
-		if(is_dir($folder)){
+		if (is_dir($folder)) {
 			$local = scandir($folder);
 			foreach ($local as $item) {
-				if(!in_array($item, $skipItem)){
-					$fullItem = $folder.DS.$item;
-					if(is_dir($fullItem)){
+				if (!in_array($item, $skipItem)) {
+					$fullItem = $folder . DS . $item;
+					if (is_dir($fullItem)) {
 						$next_folder = $this->scanFolder($fullItem);
 						$liste = array_merge($liste, $next_folder);
-					} elseif($matchExtension($item, '.php')) {
+					} elseif ($matchExtension($item, '.php')) {
 						$liste[strtolower($fullItem)] = $fullItem;
 					}
 				}
 			}
-		}else{
+		} else {
 			throw new NotFoundFolder($folder);
 		}
 		return $liste;
@@ -262,13 +270,13 @@ class Autoloader {
 	/**
 	 * @access public
 	 * @param bool $prepend enregistre l'autoloader en début de file
-     * @return Autoloader
+	 * @return Autoloader
 	 */
 	function register(/* bool */ $prepend = false) {
 		$this->registred = true;
 		$this->loadCache();
 		spl_autoload_register(array($this, 'loadClass'), true, $prepend);
-        return $this;
+		return $this;
 	}
 
 	/**
@@ -276,31 +284,31 @@ class Autoloader {
 	 * @param $actived
 	 * @return Autoloader
 	 */
-	function activeCache(/*bool*/$actived){
-		$this->cached = (bool)$actived;
+	function activeCache(/* bool */$actived) {
+		$this->cached = (bool) $actived;
 		$this->loadCache();
 		return $this;
 	}
 
 	/**
 	 * @access public
-     * @return autoloader
+	 * @return autoloader
 	 */
 	function unregister() {
 		$this->registred = false;
 		spl_autoload_unregister(array($this, 'loadClass'));
-        return $this;
+		return $this;
 	}
 
 	/**
 	 * @access protected
 	 */
-	protected function loadCache(){
-		if($this->cached){
-			if(file_exists($this->cache_file_name)){
+	protected function loadCache() {
+		if ($this->cached) {
+			if (file_exists($this->cache_file_name)) {
 				$content = file_get_contents($this->cache_file_name);
 				$temp = unserialize($content);
-				if( is_array($temp)){
+				if (is_array($temp)) {
 					$this->class_files = array_merge($temp, $this->class_files);
 				}
 			}
@@ -310,8 +318,8 @@ class Autoloader {
 	/**
 	 * @access protected
 	 */
-	protected function saveCache(){
-		if($this->cached){
+	protected function saveCache() {
+		if ($this->cached) {
 			file_put_contents($this->cache_file_name, serialize($this->class_files));
 		}
 	}

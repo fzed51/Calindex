@@ -17,19 +17,19 @@ class Date {
 	use GetterSetter;
 
 	static private $dico = [
-		'fr' => [
-			'mois' => ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-			'mois_abr' => ['jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
-			'jour' => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
-			'jour_abr' => ['lu.', 'ma.', 'me.', 'je.', 've.', 'sa.', 'di.']
-		],
-		// TODO: ajoute la culture english
-		'en' => [
-			'mois' => ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
-			'mois_abr' => ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-			'jour' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			'jour_abr' => ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
-		],
+			'fr' => [
+					'mois' => ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+					'mois_abr' => ['jan.', 'fév.', 'mars', 'avr.', 'mai', 'juin', 'jui.', 'aout', 'sep.', 'oct.', 'nov.', 'déc.'],
+					'jour' => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
+					'jour_abr' => ['lu.', 'ma.', 'me.', 'je.', 've.', 'sa.', 'di.']
+			],
+			// TODO: ajoute la culture english
+			'en' => [
+					'mois' => ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
+					'mois_abr' => ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+					'jour' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+					'jour_abr' => ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+			],
 	];
 	static public $culture = 'fr';
 	private $year;
@@ -81,10 +81,14 @@ class Date {
 			$this->set_month($month);
 			$this->set_day($day);
 		}
+		if (!$this->isValide()) {
+			throw new DateNotValidException("$day/$month/$date n'est pas une date valide.");
+		}
 	}
 
 	public function __toString() {
-		return \sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
+		$toString = sprintf("%04d%02d%02d", $this->year, $this->month, $this->day);
+		return $toString;
 	}
 
 	public function add_day($nb_day, $clone = false) {
@@ -96,31 +100,26 @@ class Date {
 		if ($nb_day == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_day > 0) {
-			for ($p = 0; $p < $nb_day; $p++) {
-				$day++;
-				if ($day > self::nb_jours_mois($year, $month)) {
-					$day = 1;
-					$month++;
-					if ($month > 12) {
-						$month = 1;
-						$year++;
-					}
+			while ($nb_day > 0) {
+				$nb_jour_mois = self::nb_jours_mois($date->year, $date->month);
+				if (($date->day + $nb_day) > $nb_jour_mois) {
+					$nb_day += ($date->day - 1);
+					$date->day = 1;
+					$date->add_month(1);
+					$nb_day -= $nb_jour_mois;
+				} else {
+					$date->day += $nb_day;
+					$nb_day = 0;
 				}
 			}
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->sub_day(abs($nb_day));
 		}
 		return $date;
 	}
 
-	public function sub_day($day, $clone = false) {
+	public function sub_day($nb_day, $clone = false) {
 		if ($clone) {
 			$date = clone $this;
 		} else {
@@ -129,24 +128,18 @@ class Date {
 		if ($nb_day == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_day > 0) {
-			for ($p = 0; $p < $nb_day; $p++) {
-				$day++;
-				if ($day < 1) {
-					$month--;
-					if ($month < 1) {
-						$month = 12;
-						$year--;
-					}
-					$day = self::nb_jours_mois($year, $month);
+			while ($nb_day > 0) {
+				if (($date->day - $nb_day) < 1) {
+					$nb_day -= $date->day;
+					$date->day = 1;
+					$date->sub_month(1);
+					$date->day = self::nb_jours_mois($date->year, $date->month);
+				} else {
+					$date->day -= $nb_day;
+					$nb_day = 0;
 				}
 			}
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->add_day(abs($nb_day));
 		}
@@ -162,21 +155,24 @@ class Date {
 		if ($nb_month == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_month > 0) {
-			while ($nb_month-- > 0) {
-				$month++;
-				if ($month > 12) {
-					$month = 1;
-					$year++;
+			while ($nb_month > 0) {
+				if (($date->month + $nb_month) > 12) {
+					$nb_month += ($date->month - 1);
+					$date->month = 1;
+					$nb_month -= 12;
+					$date->year += 1;
+					$day = ($date->day - 1);
+					$date->day = 1;
+					$date->add_day($day);
+				} else {
+					$date->month += $nb_month;
+					$nb_month = 0;
+					$day = ($date->day - 1);
+					$date->day = 1;
+					$date->add_day($day);
 				}
 			}
-			$day = min($day, self::nb_jours_mois($year, $month));
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->sub_month(abs($nb_month));
 		}
@@ -192,21 +188,23 @@ class Date {
 		if ($nb_month == 0) {
 			return $date;
 		}
-		$day = $date->day;
-		$month = $date->month;
-		$year = $date->year;
 		if ($nb_month > 0) {
-			while ($nb_month-- > 0) {
-				$month--;
-				if ($month < 1) {
-					$month = 12;
-					$year--;
+			while ($nb_month > 0) {
+				if (($date->month - $nb_month) < 1) {
+					$nb_month -= $date->month;
+					$date->month = 12;
+					$date->year -= 1;
+					$day = ($date->day - 1);
+					$date->day = 1;
+					$date->add_day($day);
+				} else {
+					$date->month -= $nb_month;
+					$nb_month = 0;
+					$day = ($date->day - 1);
+					$date->day = 1;
+					$date->add_day($day);
 				}
 			}
-			$day = min($day, self::nb_jours_mois($year, $month));
-			$date->year = $year;
-			$date->month = $month;
-			$date->day = $day;
 		} else {
 			$date->add_month(abs($nb_month));
 		}
@@ -236,20 +234,26 @@ class Date {
 	}
 
 	static public function dimanche_paques($year) {
-		$divmod = function($a, $b) {
-			$c = (int) $a / $b;
-			$d = $a % $b;
-			return [$c, $d];
+		$div = function($a, $b) {
+			$q = (int) ($a / $b);
+			return $q;
 		};
-		$n = $year % 19;
+		$mod = function($a, $b) {
+			$r = $a % $b;
+			return $r;
+		};
+		$divmod = function($a, $b) use($div, $mod) {
+			return [$div($a, $b), $mod($a, $b)];
+		};
+		$n = $mod($year, 19);
 		list($c, $u) = $divmod($year, 100);
 		list($s, $t) = $divmod($c, 4);
-		$p = (int) (($c + 8) / 25);
-		$q = (int) (($c - $p + 1) / 3);
-		$e = ( 19 * $n + $c - $s - $q + 15) % 30;
+		$p = $div(($c + 8), 25);
+		$q = $div(($c - $p + 1), 3);
+		$e = $mod(( 19 * $n + $c - $s - $q + 15), 30);
 		list($b, $d) = $divmod($u, 4);
-		$l = (32 + 2 * $t + 2 * $b - $e - $d) % 7;
-		$h = (int) (($n + 11 * $e + 22 * $l) / 451);
+		$l = $mod((32 + 2 * $t + 2 * $b - $e - $d), 7);
+		$h = $div(($n + 11 * $e + 22 * $l), 451);
 		list($m, $j) = $divmod($e + $l - 7 * $h + 114, 31);
 		$j += 1;
 		return Self::make($year, $m, $j);
@@ -273,12 +277,10 @@ class Date {
 	static public function jour_semaine($y, $m, $d) {
 		$D = 0;
 		if ($m >= 3) {
-			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($y / 4)) -
-					((int) ($y / 100)) + ((int) ($y / 400)) - 2 );
+			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($y / 4)) - ((int) ($y / 100)) + ((int) ($y / 400)) - 2 );
 		} else {
 			$z = $y - 1;
-			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($z / 4)) -
-					((int) ($z / 100)) + ((int) ($z / 400)) );
+			$D = ( ((int) ((23 * $m) / 9)) + $d + 4 + $y + ((int) ($z / 4)) - ((int) ($z / 100)) + ((int) ($z / 400)) );
 		}
 		return (($D - 1) % 7) + 1;
 	}
@@ -336,11 +338,18 @@ class Date {
 	}
 
 	public function compare(Date $jour) {
-		$j1 = (int) $this->format();
-		$j2 = (int) $jour->format();
+		$j1 = $this->day + (100 * $this->month) + (10000 * $this->year);
+		$j2 = $jour->day + (100 * $jour->month) + (10000 * $jour->year);
 		$diff = $j1 - $j2;
 
-		return (!$diff) ? 0 : $diff / abs($diff);
+		return ($diff == 0) ? 0 : $diff / abs($diff);
+	}
+
+	public function isValide() {
+		return ($this->month >= 1 &&
+				$this->month <= 12) &&
+				$this->day >= 1 &&
+				$this->day <= self::nb_jours_mois($this->year, $this->month);
 	}
 
 }
