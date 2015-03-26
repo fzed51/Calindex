@@ -29,9 +29,9 @@ class IcsParser {
 
 	/**
 	 * 	Résultat du parse
-	 * @var array
+	 * @var \stdClass
 	 */
-	private $data_parsed = [];
+	private $data_parsed = null;
 
 	/**
 	 * __construct
@@ -43,6 +43,11 @@ class IcsParser {
 		$this->parseIcs();
 	}
 
+	/**
+	 * readData
+	 * Lit la ligne suivante de data
+	 * @return boolean|string
+	 */
 	private function readData() {
 		if ($this->read_point < count($this->data)) {
 			$line = $this->data[$this->read_point];
@@ -50,27 +55,69 @@ class IcsParser {
 		} else {
 			$line = FALSE;
 		}
-		return $line
+		return $line;
 	}
 
 	/**
 	 * parseIcs
 	 * méthode de parse principale
+	 * @throws Exception
 	 */
 	private function parseIcs() {
-
 		$line = '';
-		$ics = new \stdClass();
-		while (FALSE !== ($line = $this->readData())) {
-			$line = rtrim($line);
-			switch ($line) {
-				case 'BEGIN:VEVENT':
-					break;
-				case 'END:VEVENT':
-					break;
-				default :
+		while ('BEGIN:VCALENDAR' !== ($line = $this->readData())) {
+			if ($line === FALSE) {
+				throw new Exception("le fichier parser n'est pas valide\nLa balise 'BEGIN:VCALENDAR' était attendu.");
 			}
 		}
+		return $this->parseSubElement('VCALENDAR');
+	}
+
+	/**
+	 *
+	 * @param \stdClass $elementSuperieur
+	 * @param string $lastType
+	 * @return \stdClass
+	 */
+	private function parseSubElement(/* string */ $lastType) {
+		$line = '';
+		$subElement = new \stdClass();
+		$lastKey = '__ERROR__';
+		$ics->__sub = [];
+		while ('END:' . $lastType !== ($line = $this->readData())) {
+			$line = rtrim($line);
+			if (false !== preg_match("/([^;:]*)(?:;([^:]*))?:(.*)/", $line, $output_array)) {
+				$key = $output_array[1];
+				$lastKey = $key;
+				$opt = $output_array[2];
+				$val = $output_array[3];
+				switch ($key) {
+					case 'BEGIN':
+						$lastType = $val;
+						$ics->__sub[] = $this->parseSubElement($lastType);
+						break;
+					case 'END':
+						return $subElement;
+					default :
+						switch ($opt) {
+							case 'VALUE=DATE':
+								$ics->$key = new Date($val);
+								break;
+							default :
+								$ics->$key = $val;
+						}
+				}
+			} else {
+				if ($line[0] === ' ') {
+					$ics->$lastKey .= trim($line);
+				}
+			}
+		}
+		throw new Exception('Le sous element ne se termine pas');
+	}
+
+	function getParse() {
+		return $this->data_parsed;
 	}
 
 }
