@@ -7,7 +7,8 @@ date_default_timezone_set('Europe/Paris');
 define('DS', DIRECTORY_SEPARATOR);
 define('WS', '/');
 define('ROOT', __DIR__ . DS);
-define('ROOT_VUE', ROOT . 'app' . DS . 'vue');
+define('ROOT_TMP', ROOT . 'tmp' . DS);
+define('ROOT_VUE', ROOT . 'app' . DS . 'vue' . DS);
 $directory = basename(ROOT);
 $tabUrl = explode($directory, filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL));
 if (count($tabUrl) > 1) {
