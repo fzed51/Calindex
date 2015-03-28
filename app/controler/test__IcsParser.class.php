@@ -36,18 +36,6 @@ SUMMARY:Rentrée scolaire des enseignants - Zones A B C
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:67_74_81@education.gouv.fr
-DTSTAMP:20140516T145118Z
-DESCRIPTION:Rentrée scolaire des élèves
-DTSTART;VALUE=DATE:20080902
-LOCATION:Aix-Marseille\, Amiens\, Besançon\, Bordeaux\, Caen\, Clermont-Fe
- rrand\, Créteil\, Dijon\, Grenoble\, Lille\, Limoges\, Lyon\, Montpellier
- \, Nancy-Metz\, Nantes\, Nice\, Orléans-Tours\, Paris\, Poitiers\, Reims\
- , Rennes\, Rouen\, Strasbourg\, Toulouse\, Versailles
-SUMMARY:Rentrée scolaire des élèves - Zones A B C
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:68_75_82@education.gouv.fr
 DTSTAMP:20140516T145118Z
 DESCRIPTION:Vacances de la Toussaint
@@ -103,17 +91,6 @@ DTEND;VALUE=DATE:20090309
 LOCATION:Aix-Marseille\, Amiens\, Besançon\, Dijon\, Lille\, Limoges\, Nic
  e\, Orléans-Tours\, Poitiers\, Reims\, Rouen\, Strasbourg
 SUMMARY:Vacances d'hiver - Zone B
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:71@education.gouv.fr
-DTSTAMP:20140516T145118Z
-DESCRIPTION:Vacances de printemps
-DTSTART;VALUE=DATE:20090404
-DTEND;VALUE=DATE:20090420
-LOCATION:Caen\, Clermont-Ferrand\, Grenoble\, Lyon\, Montpellier\, Nancy-Me
- tz\, Nantes\, Rennes\, Toulouse
-SUMMARY:Vacances de printemps - Zone A
 TRANSP:TRANSPARENT
 END:VEVENT
 END:VCALENDAR";
