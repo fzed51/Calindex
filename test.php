@@ -180,6 +180,7 @@ function afficheSourceTestee($fileName) {
 	?>
 	<html>
 		<head>
+			<title>Source de <?= basename($fileName); ?></title>
 			<style>
 				html{
 					font: 400 normal 12px/14px sans-serif;
