@@ -65,12 +65,13 @@ class IcsParser {
 	 */
 	private function parseIcs() {
 		$line = '';
-		while ('BEGIN:VCALENDAR' !== ($line = $this->readData())) {
+		while ('BEGIN:VCALENDAR' != trim($line = $this->readData())) {
 			if ($line === FALSE) {
-				throw new Exception("le fichier parser n'est pas valide\nLa balise 'BEGIN:VCALENDAR' était attendu.");
+				throw new \Exception("le fichier parser n'est pas valide\nLa balise 'BEGIN:VCALENDAR' était attendu.");
 			}
+			$line = $this->readData();
 		}
-		return $this->parseSubElement('VCALENDAR');
+		$this->data_parsed = $this->parseSubElement('VCALENDAR');
 	}
 
 	/**
@@ -83,10 +84,10 @@ class IcsParser {
 		$line = '';
 		$subElement = new \stdClass();
 		$lastKey = '__ERROR__';
-		$ics->__sub = [];
-		while ('END:' . $lastType !== ($line = $this->readData())) {
+		$subElement->__sub = [];
+		while (false !== trim($line = $this->readData())) {
 			$line = rtrim($line);
-			if (false !== preg_match("/([^;:]*)(?:;([^:]*))?:(.*)/", $line, $output_array)) {
+			if (1 === preg_match("/([^;:]+)(?:;([^:]*))?:(.+)/", $line, $output_array)) {
 				$key = $output_array[1];
 				$lastKey = $key;
 				$opt = $output_array[2];
@@ -94,26 +95,26 @@ class IcsParser {
 				switch ($key) {
 					case 'BEGIN':
 						$lastType = $val;
-						$ics->__sub[] = $this->parseSubElement($lastType);
+						array_push($subElement->__sub, $this->parseSubElement($lastType));
 						break;
 					case 'END':
 						return $subElement;
 					default :
 						switch ($opt) {
 							case 'VALUE=DATE':
-								$ics->$key = new Date($val);
+								$subElement->$key = new Date($val);
 								break;
 							default :
-								$ics->$key = $val;
+								$subElement->$key = $val;
 						}
 				}
 			} else {
 				if ($line[0] === ' ') {
-					$ics->$lastKey .= trim($line);
+					$subElement->$lastKey .= trim($line);
 				}
 			}
 		}
-		throw new Exception('Le sous element ne se termine pas');
+		throw new \Exception('Le sous element ne se termine pas');
 	}
 
 	function getParse() {
