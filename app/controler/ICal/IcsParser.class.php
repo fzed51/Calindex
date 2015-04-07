@@ -8,6 +8,10 @@
 
 namespace App\Controler\ICal;
 
+use App\Controler\Date;
+use Exception;
+use stdClass;
+
 /**
  * Description of IcsParser
  *
@@ -29,7 +33,7 @@ class IcsParser {
 
 	/**
 	 * 	Résultat du parse
-	 * @var \stdClass
+	 * @var stdClass
 	 */
 	private $data_parsed = null;
 
@@ -67,7 +71,7 @@ class IcsParser {
 		$line = '';
 		while ('BEGIN:VCALENDAR' != trim($line = $this->readData())) {
 			if ($line === FALSE) {
-				throw new \Exception("le fichier parser n'est pas valide\nLa balise 'BEGIN:VCALENDAR' était attendu.");
+				throw new Exception("le fichier parser n'est pas valide\nLa balise 'BEGIN:VCALENDAR' était attendu.");
 			}
 			$line = $this->readData();
 		}
@@ -76,13 +80,13 @@ class IcsParser {
 
 	/**
 	 *
-	 * @param \stdClass $elementSuperieur
+	 * @param stdClass $elementSuperieur
 	 * @param string $lastType
-	 * @return \stdClass
+	 * @return stdClass
 	 */
 	private function parseSubElement(/* string */ $lastType) {
 		$line = '';
-		$subElement = new \stdClass();
+		$subElement = new stdClass();
 		$lastKey = '__ERROR__';
 		$subElement->__sub = [];
 		while (false !== trim($line = $this->readData())) {
@@ -114,7 +118,7 @@ class IcsParser {
 				}
 			}
 		}
-		throw new \Exception('Le sous element ne se termine pas');
+		throw new Exception('Le sous element ne se termine pas');
 	}
 
 	function getParse() {
