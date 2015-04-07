@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace App\Controler;
+namespace App\Controler\ICal;
 
 /**
  * Description of IcsParser
