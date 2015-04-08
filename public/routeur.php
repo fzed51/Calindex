@@ -9,7 +9,7 @@
 // router.php
 if (php_sapi_name() == 'cli-server') {
 	$fullNamePublic = $_SERVER["DOCUMENT_ROOT"] . "/public" . $_SERVER["REQUEST_URI"];
-	if (file_exists($fullNamePublic)) {
+	if (is_file($fullNamePublic)) {
 		$path = pathinfo($fullNamePublic);
 		switch ($path["extension"]) {
 			case 'ico':
