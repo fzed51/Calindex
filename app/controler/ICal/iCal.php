@@ -11,6 +11,22 @@
  *
  * @author fabien.sanchez
  */
-class iCal {
-	//put your code here
+class iCal extends iCalContains {
+
+	function getEventAt(\App\Controler\Date $date) {
+		$events = [];
+		/**
+		 * @var Event Description
+		 */
+		foreach ($this->__sub as $event) {
+			if ($event instanceof Event) {
+				if ($date->compare($event->DTSTART) >= 0 && $date->compare($event->DTEND)) {
+					$events[] = $event;
+				}
+			}
+		}
+
+		return $events;
+	}
+
 }

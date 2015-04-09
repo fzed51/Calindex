@@ -12,5 +12,8 @@
  * @author fabien.sanchez
  */
 class Event {
-	//put your code here
+
+	public $DTSTART;
+	public $DTEND;
+
 }

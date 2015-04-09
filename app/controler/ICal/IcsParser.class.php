@@ -86,9 +86,19 @@ class IcsParser {
 	 */
 	private function parseSubElement(/* string */ $lastType) {
 		$line = '';
-		$subElement = new stdClass();
+		switch ($lastType) {
+			case 'VCALENDAR':
+				$subElement = new ICal();
+				break;
+			case 'VEVENT':
+				$subElement = new Event();
+				break;
+			default:
+				$subElement = new stdClass();
+				break;
+		}
+
 		$lastKey = '__ERROR__';
-		$subElement->__sub = [];
 		while (false !== trim($line = $this->readData())) {
 			$line = rtrim($line);
 			if (1 === preg_match("/([^;:]+)(?:;([^:]*))?:(.+)/", $line, $output_array)) {
@@ -99,7 +109,7 @@ class IcsParser {
 				switch ($key) {
 					case 'BEGIN':
 						$lastType = $val;
-						array_push($subElement->__sub, $this->parseSubElement($lastType));
+						$subElement->add($this->parseSubElement($lastType));
 						break;
 					case 'END':
 						return $subElement;
