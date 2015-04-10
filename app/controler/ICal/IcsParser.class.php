@@ -88,10 +88,16 @@ class IcsParser {
 		$line = '';
 		switch ($lastType) {
 			case 'VCALENDAR':
-				$subElement = new ICal();
+				$subElement = new Calendar();
 				break;
 			case 'VEVENT':
 				$subElement = new Event();
+				break;
+			case 'VTODO':
+				$subElement = new Todo();
+				break;
+			case 'VCard':
+				$subElement = new Card();
 				break;
 			default:
 				$subElement = new stdClass();
