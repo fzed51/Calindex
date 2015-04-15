@@ -25,4 +25,16 @@ trait Singleton {
 		return self::$__instance;
 	}
 
+	public function __clone() {
+		throw new \RuntimeException('Cannot clonse Singletone objects');
+	}
+
+	public function __sleep() {
+		throw new \RuntimeException('Cannot serialize Singletone objects');
+	}
+
+	public function __invoke() {
+		return self::getInstance();
+	}
+
 }
