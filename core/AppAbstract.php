@@ -14,6 +14,8 @@ use Core\Database\PDOConnect;
 use Core\Database\PDOSqLiteConnexion;
 
 abstract class AppAbstract {
+	
+	use \Core\Pattern\Singleton;
 
 	/**
 	 * @var string $appName Nom de l'applicatino
@@ -55,6 +57,11 @@ abstract class AppAbstract {
 		$class = '\App\Table\\' . ucfirst($table) . 'Table';
 		return new $class($db);
 	}
+	
+	final function run (){
+		$this->handle();
+	}
 
-	abstract function run();
+	abstract function handle();
+	
 }

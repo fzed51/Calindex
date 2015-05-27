@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Core\Pattern;
 
 /**
@@ -18,23 +12,33 @@ trait Singleton {
 	private static $__instance = null;
 
 	public static function getInstance() {
-		if (self::$__instance === null) {
+		if (static::$__instance === null) {
 			$call = get_called_class();
-			self::$__instance = new $call();
+			static::$__instance = new $call();
 		}
-		return self::$__instance;
+		return static::$__instance;
 	}
 
-	public function __clone() {
-		throw new \RuntimeException('Cannot clonse Singletone objects');
+	final public function __clone(){
+	    throw new \RuntimeException(
+	        sprintf(
+	            'Cloning of %s instances is not alllowed',
+	             get_class($this)
+	        )
+	    );
 	}
 
 	public function __sleep() {
-		throw new \RuntimeException('Cannot serialize Singletone objects');
+		throw new \RuntimeException(
+			sprintf(
+	            'Serializing of %s instances is not alllowed',
+	             get_class($this)
+	        )
+		);
 	}
 
 	public function __invoke() {
-		return self::getInstance();
+		return static::getInstance();
 	}
 
 }

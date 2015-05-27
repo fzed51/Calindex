@@ -6,10 +6,8 @@ use Core\AppAbstract;
 use Core\Helper\Collection;
 
 class App extends AppAbstract {
-	
-	use \Core\Pattern\Singleton;
-	
-    function run()
+		
+    function handle()
     {
 		$this->SetConfig('default');
 		
